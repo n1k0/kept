@@ -38,9 +38,15 @@ KeptStore.prototype = {
   }
 };
 
-var KeptModal = React.createClass({
+var Modal = React.createClass({
   render: function() {
-    return <div className="kept-modal">{this.props.children}</div>
+    return (
+      <div className="kept-modal">
+        <Panel title={this.props.title}>
+          {this.props.children}
+        </Panel>
+      </div>
+    );
   }
 });
 
@@ -106,7 +112,7 @@ var KeptApp = React.createClass({
     return (
       <div>
         <KeptMenuBar formCreator={this.formCreator} />
-        <KeptModal>{this.state.form}</KeptModal>
+        {this.state.form}
         <KeptItems items={this.state.items} edit={this.edit} update={this.update} remove={this.remove} />
       </div>
     );
@@ -157,23 +163,41 @@ var KeptItems = React.createClass({
   }
 });
 
-var KeptPanel = React.createClass({
+var IconButton = React.createClass({
+  getDefaultProps: function() {
+    return {
+      type: "default",
+      icon: undefined,
+      label: "Button"
+    };
+  },
+
   render: function() {
+    var btnClass = "btn btn-sm btn-" + this.props.type;
+    var iconClass = "glyphicon glyphicon-" + this.props.icon;
     return (
-      <div className="kept-entry panel panel-primary">
+      <button className={btnClass} onClick={this.props.onClick}>
+        <span className={iconClass}></span>&nbsp;{this.props.label}
+      </button>
+    );
+  }
+});
+
+var Panel = React.createClass({
+  render: function() {
+    var editBtn, deleteBtn;
+    if (this.props.edit)
+      editBtn = <IconButton icon="edit" label="Edit" onClick={this.props.edit} />;
+    if (this.props.delete)
+      deleteBtn = <IconButton icon="trash" type="danger" label="Delete" onClick={this.props.delete} />;
+    return (
+      <div className="kept-panel panel panel-primary">
         <header className="panel-heading">
-          <h3 className="panel-title">{this.props.title || "Untitled"}</h3>
+          <h3 className="panel-title">{this.props.title}</h3>
         </header>
         <section className="panel-body">{this.props.children}</section>
         <footer className="panel-footer">
-          <div className="btn-group">
-            <button className="btn btn-default btn-sm" onClick={this.props.handleClickEdit}>
-              <span className="glyphicon glyphicon-edit"></span>&nbsp;Edit
-            </button>
-            <button className="btn btn-danger btn-sm" onClick={this.props.handleClickDelete}>
-              <span className="glyphicon glyphicon-trash"></span>&nbsp;Delete
-            </button>
-          </div>
+          <div className="btn-group">{editBtn} {deleteBtn}</div>
         </footer>
       </div>
     );
@@ -205,11 +229,11 @@ var KeptEntry = React.createClass({
 
   render: function() {
     return (
-      <KeptPanel title={this.props.itemData.title}
-                 handleClickEdit={this.handleClickEdit}
-                 handleClickDelete={this.handleClickDelete}>
+      <Panel title={this.props.itemData.title || "Untitled"}
+             edit={this.handleClickEdit}
+             delete={this.handleClickDelete}>
         {this.getComponent(this.props.itemData)}
-      </KeptPanel>
+      </Panel>
     );
   }
 });
@@ -248,21 +272,22 @@ var KeptTextForm = React.createClass({
   render: function() {
     var data = this.props.data;
     return (
-      <form role="form" onSubmit={this.handleSubmit}>
-        <input type="hidden" ref="id" defaultValue={data.id} />
-        <h3>Create new Text</h3>
-        <div className="form-group">
-          <input ref="title" type="text" className="form-control" placeholder="Title" defaultValue={data.title} />
-        </div>
-        <div className="form-group">
-          <textarea ref="text" className="form-control" placeholder="Text…" defaultValue={data.text} rows="5" required />
-        </div>
-        <div className="form-group">
-          <button type="submit" className="btn btn-primary">OK</button>
-          &nbsp;
-          <a href="#" onClick={this.handleCancel}>Cancel</a>
-        </div>
-      </form>
+      <Modal title="Create new Text">
+        <form role="form" onSubmit={this.handleSubmit}>
+          <input type="hidden" ref="id" defaultValue={data.id} />
+          <div className="form-group">
+            <input ref="title" type="text" className="form-control" placeholder="Title" defaultValue={data.title} />
+          </div>
+          <div className="form-group">
+            <textarea ref="text" className="form-control" placeholder="Text…" defaultValue={data.text} rows="5" required />
+          </div>
+          <div className="form-group">
+            <button type="submit" className="btn btn-primary">OK</button>
+            &nbsp;
+            <a href="#" onClick={this.handleCancel}>Cancel</a>
+          </div>
+        </form>
+      </Modal>
     );
   }
 });
@@ -433,25 +458,26 @@ var KeptTodoForm = React.createClass({
   render: function() {
     console.log("---");
     return (
-      <form className="todo-form" role="form" onSubmit={this.handleSubmit}>
-        <input type="hidden" ref="id" defaultValue={this.props.data.id} />
-        <h3>Create new Todo</h3>
-        <div className="form-group">
-          <input ref="title" type="text" className="form-control" placeholder="Title" defaultValue={this.props.data.title} />
-        </div>
-        <ul className="list-group">{
-          this.state.tasks.map(function(task, key) {
-            return <KeptTodoTaskForm key={key} data={task} updateTask={this.updateTask} removeTask={this.removeTask} />
-          }, this)
-        }</ul>
-        <div className="form-group">
-          <button className="btn btn-default" onClick={this.addTask}>Add task</button>
-          &nbsp;
-          <button className="btn btn-primary" type="submit">Save</button>
-          &nbsp;
-          <a href="#" onClick={this.handleCancel}>Cancel</a>
-        </div>
-      </form>
+      <Modal title="Create new Todo">
+        <form className="todo-form" role="form" onSubmit={this.handleSubmit}>
+          <input type="hidden" ref="id" defaultValue={this.props.data.id} />
+          <div className="form-group">
+            <input ref="title" type="text" className="form-control" placeholder="Title" defaultValue={this.props.data.title} />
+          </div>
+          <ul className="list-group">{
+            this.state.tasks.map(function(task, key) {
+              return <KeptTodoTaskForm key={key} data={task} updateTask={this.updateTask} removeTask={this.removeTask} />
+            }, this)
+          }</ul>
+          <div className="form-group">
+            <button className="btn btn-default" onClick={this.addTask}>Add task</button>
+            &nbsp;
+            <button className="btn btn-primary" type="submit">Save</button>
+            &nbsp;
+            <a href="#" onClick={this.handleCancel}>Cancel</a>
+          </div>
+        </form>
+      </Modal>
     );
   }
 });
