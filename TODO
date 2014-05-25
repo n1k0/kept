@@ -1,0 +1,2 @@
+- use localstorage for persistence
+- sync with mobile version using webrtc datachannels

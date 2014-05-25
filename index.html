@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Kept</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <style>
+  /* XXX move to separate stylesheet */
+  html {
+    height: 100%;
+  }
+  html {
+    height: 100%;
+  }
+  .done {color: #777; text-decoration: line-through;}
+  .todo-item-label {margin-left: .5em}
+  .kept-list {
+    height: 100%;
+    -webkit-columns: 3;
+    -moz-columns: 3;
+    columns: 3;
+  }
+  .kept-entry {
+    /* FF hack to emulate "break-inside: avoid;" behavior */
+    display: table;
+    width: 100%;
+    /* Webkit "break-inside: avoid;" hack */
+    -webkit-column-break-after: avoid;
+    -webkit-column-break-before: avoid;
+    -webkit-column-break-inside: avoid;
+    /* Standard */
+    -webkit-break-inside: avoid;
+    -moz-break-inside: avoid;
+    break-inside: avoid;
+  }
+  /* TODO: responsive adjustment of number of columns */
+  </style>
+  <script src="bower_components/react/react.min.js"></script>
+  <script src="bower_components/react/JSXTransformer.js"></script>
+</head>
+<body>
+  <div class="container-fluid">
+    <div id="kept"></div>
+    <footer>
+      <p>Icons by <a href="http://glyphicons.com/">Glyphicons</a>.</p>
+    </footer>
+  </div>
+  <script type="text/jsx" src="src/kept.js"></script>
+</body>
+</html>
