@@ -1,0 +1,39 @@
+html {
+  height: 100%;
+}
+
+html {
+  height: 100%;
+}
+
+.done {
+  color: #777;
+  text-decoration: line-through;
+}
+
+.todo-item-label {
+  margin-left: .5em;
+}
+
+.kept-list {
+  height: 100%;
+  -webkit-columns: 5;
+  -moz-columns: 5;
+  columns: 5;
+}
+
+.kept-entry {
+  /* FF hack to emulate "break-inside: avoid;" behavior */
+  display: table;
+  width: 100%;
+  /* Webkit "break-inside: avoid;" hack */
+  -webkit-column-break-after: avoid;
+  -webkit-column-break-before: avoid;
+  -webkit-column-break-inside: avoid;
+  /* Standard */
+  -webkit-break-inside: avoid;
+  -moz-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* TODO: responsive adjustment of number of columns */
