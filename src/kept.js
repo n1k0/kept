@@ -38,6 +38,12 @@ KeptStore.prototype = {
   }
 };
 
+var KeptModal = React.createClass({
+  render: function() {
+    return <div className="kept-modal">{this.props.children}</div>
+  }
+});
+
 var KeptApp = React.createClass({
   store: new KeptStore(),
 
@@ -99,20 +105,21 @@ var KeptApp = React.createClass({
   render: function() {
     return (
       <div>
-        <MenuBar formCreator={this.formCreator} />
-        <div>{this.state.form}</div>
+        <KeptMenuBar formCreator={this.formCreator} />
+        <KeptModal>{this.state.form}</KeptModal>
         <KeptItems items={this.state.items} edit={this.edit} update={this.update} remove={this.remove} />
       </div>
     );
   }
 });
 
-var MenuBar = React.createClass({
+var KeptMenuBar = React.createClass({
   newItem: function(type) {
     return this.props.formCreator(type).bind(null, {});
   },
 
   render: function() {
+    // FIXME responsive menu display not available without jQuery -_-'
     return (
       <nav className="navbar navbar-default" role="navigation">
         <div className="container-fluid">
@@ -150,6 +157,29 @@ var KeptItems = React.createClass({
   }
 });
 
+var KeptPanel = React.createClass({
+  render: function() {
+    return (
+      <div className="kept-entry panel panel-primary">
+        <header className="panel-heading">
+          <h3 className="panel-title">{this.props.title || "Untitled"}</h3>
+        </header>
+        <section className="panel-body">{this.props.children}</section>
+        <footer className="panel-footer">
+          <div className="btn-group">
+            <button className="btn btn-default btn-sm" onClick={this.props.handleClickEdit}>
+              <span className="glyphicon glyphicon-edit"></span>&nbsp;Edit
+            </button>
+            <button className="btn btn-danger btn-sm" onClick={this.props.handleClickDelete}>
+              <span className="glyphicon glyphicon-trash"></span>&nbsp;Delete
+            </button>
+          </div>
+        </footer>
+      </div>
+    );
+  }
+});
+
 var KeptEntry = React.createClass({
   _components: {
     text: function(itemData) {
@@ -175,24 +205,11 @@ var KeptEntry = React.createClass({
 
   render: function() {
     return (
-      <div className="kept-entry panel panel-primary">
-        <div className="panel-heading">
-          <h3 className="panel-title">{this.props.itemData.title || "Untitled"}</h3>
-        </div>
-        <div className="panel-body">
-          {this.getComponent(this.props.itemData)}
-        </div>
-        <div className="panel-footer">
-          <div className="btn-group">
-            <button className="btn btn-default btn-sm" onClick={this.handleClickEdit}>
-              <span className="glyphicon glyphicon-edit"></span>&nbsp;Edit
-            </button>
-            <button className="btn btn-danger btn-sm" onClick={this.handleClickDelete}>
-              <span className="glyphicon glyphicon-trash"></span>&nbsp;Delete
-            </button>
-          </div>
-        </div>
-      </div>
+      <KeptPanel title={this.props.itemData.title}
+                 handleClickEdit={this.handleClickEdit}
+                 handleClickDelete={this.handleClickDelete}>
+        {this.getComponent(this.props.itemData)}
+      </KeptPanel>
     );
   }
 });
