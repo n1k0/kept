@@ -27,6 +27,9 @@
   -moz-break-inside: avoid;
   break-inside: avoid;
 }
+  .kept-panel header {
+    cursor: move;
+  }
 
 /* TODO: responsive adjustment of number of columns */
 

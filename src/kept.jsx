@@ -108,12 +108,23 @@ var KeptApp = React.createClass({
     this.store.save(items);
   },
 
+  move: function(fromIndex, toIndex) {
+    var items = this.state.items;
+    items.splice(toIndex, 0, items.splice(fromIndex, 1)[0]);
+    this.setState({items: items});
+    this.store.save(items);
+  },
+
   render: function() {
     return (
       <div>
         <KeptMenuBar formCreator={this.formCreator} />
         {this.state.form}
-        <KeptItems items={this.state.items} edit={this.edit} update={this.update} remove={this.remove} />
+        <KeptItems items={this.state.items}
+                   edit={this.edit}
+                   update={this.update}
+                   remove={this.remove}
+                   move={this.move} />
       </div>
     );
   }
@@ -157,7 +168,8 @@ var KeptItems = React.createClass({
         return <KeptEntry key={key} itemData={itemData}
                   edit={this.props.edit}
                   remove={this.props.remove}
-                  update={this.props.update} />
+                  update={this.props.update}
+                  move={this.props.move} />
       }.bind(this))
     }</div>
   }
@@ -227,13 +239,42 @@ var KeptEntry = React.createClass({
     this.props.remove(this.props.itemData);
   },
 
+  handleDragStart: function(event) {
+    event.dataTransfer.effectAllowed = "move";
+    event.dataTransfer.setData('text/plain', this.props.key);
+  },
+
+  handleDragEnter: function(event) {
+    event.preventDefault();
+  },
+
+  handleDragLeave: function(event) {
+    event.preventDefault();
+  },
+
+  handleOnDragOver: function(event) {
+    event.preventDefault();
+  },
+
+  handleOnDrop: function(event) {
+    event.preventDefault();
+    this.props.move(event.dataTransfer.getData("text/plain"), this.props.key);
+  },
+
   render: function() {
     return (
-      <Panel title={this.props.itemData.title || "Untitled"}
-             edit={this.handleClickEdit}
-             delete={this.handleClickDelete}>
-        {this.getComponent(this.props.itemData)}
-      </Panel>
+      <div onDragStart={this.handleDragStart}
+           onDragEnter={this.handleDragEnter}
+           onDragOver={this.handleOnDragOver}
+           onDrop={this.handleOnDrop}
+           onDragLeave={this.handleDragLeave}
+           draggable="true">
+        <Panel title={this.props.itemData.title || "Untitled"}
+               edit={this.handleClickEdit}
+               delete={this.handleClickDelete}>
+          {this.getComponent(this.props.itemData)}
+        </Panel>
+      </div>
     );
   }
 });
