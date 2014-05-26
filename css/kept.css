@@ -13,10 +13,42 @@ body {
 
 .kept-list {
   height: 100%;
-  -webkit-columns: 5;
-  -moz-columns: 5;
-  columns: 5;
 }
+  @media (max-width: 768px) {
+    .kept-list {
+      -webkit-columns: 1;
+      -moz-columns: 1;
+      columns: 1;
+    }
+  }
+  @media (min-width: 768px) {
+    .kept-list {
+      -webkit-columns: 2;
+      -moz-columns: 2;
+      columns: 2;
+    }
+  }
+  @media (min-width: 992px) {
+    .kept-list {
+      -webkit-columns: 3;
+      -moz-columns: 3;
+      columns: 3;
+    }
+  }
+  @media (min-width: 1200px) {
+    .kept-list {
+      -webkit-columns: 4;
+      -moz-columns: 4;
+      columns: 4;
+    }
+  }
+  @media (min-width: 1400px) {
+    .kept-list {
+      -webkit-columns: 5;
+      -moz-columns: 5;
+      columns: 5;
+    }
+  }
 
 .kept-panel {
   /* FF hack to emulate "break-inside: avoid;" behavior */
