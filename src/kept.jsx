@@ -41,10 +41,12 @@ KeptStore.prototype = {
 var Modal = React.createClass({
   render: function() {
     return (
-      <div className="kept-modal">
-        <Panel title={this.props.title}>
-          {this.props.children}
-        </Panel>
+      <div className="kept-modal-bg">
+        <div className="kept-modal">
+          <Panel title={this.props.title}>
+            {this.props.children}
+          </Panel>
+        </div>
       </div>
     );
   }
