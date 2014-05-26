@@ -249,16 +249,27 @@ var KeptEntry = React.createClass({
   },
 
   handleDragLeave: function(event) {
+    this.unhighlight();
     event.preventDefault();
   },
 
   handleOnDragOver: function(event) {
     event.preventDefault();
+    this.highlight();
   },
 
   handleOnDrop: function(event) {
     event.preventDefault();
+    this.unhighlight();
     this.props.move(event.dataTransfer.getData("text/plain"), this.props.key);
+  },
+
+  highlight: function() {
+    this.getDOMNode().querySelector(".panel").classList.add("targetted");
+  },
+
+  unhighlight: function() {
+    this.getDOMNode().querySelector(".panel").classList.remove("targetted");
   },
 
   render: function() {

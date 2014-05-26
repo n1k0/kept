@@ -1,3 +1,7 @@
+body {
+  padding-top: 1em;
+}
+
 .done {
   color: #777;
   text-decoration: line-through;
@@ -30,6 +34,10 @@
   .kept-panel header {
     cursor: move;
   }
+
+.targetted {
+  border: 1px dashed #333;
+}
 
 /* TODO: responsive adjustment of number of columns */
 
