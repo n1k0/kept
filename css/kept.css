@@ -74,35 +74,23 @@ body {
   border: 1px dashed #333;
 }
 
-/* TODO: responsive adjustment of number of columns */
-
-.kept-modal-bg {
-  position: absolute;
-  z-index: 998;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+.modal {
   background: rgba(0, 0, 0, .65);
+  min-width: 320px;
 }
 
-/**
- * Inspired by http://cameronbaney.com/2012/07/26/pure-html5css3-responsive-modal-window/
- */
-.kept-modal {
-  position: absolute;
-  z-index: 999;
-  top: 50%;
-  left: 50%;
-  width: 60%;
-  margin: -250px 0 0 -30%;
-  box-shadow: 0 3px 7px rgba(0,0,0,.25);
-  -moz-box-shadow: 0 3px 7px rgba(0,0,0,.25);
-  -webkit-box-shadow: 0 3px 7px rgba(0,0,0,.25);
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
+.modal-body {
+  padding-bottom: 0;
 }
-  .kept-modal .panel {
-    margin-bottom: 0;
+
+.todo-form li input[type="text"] {
+  width: 445px;
+}
+  @media (max-width: 768px) {
+    .todo-form li .form-control {
+      display: inline;
+    }
+    .todo-form li input[type="text"] {
+      width: 145px;
+    }
   }

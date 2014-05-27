@@ -39,13 +39,30 @@ KeptStore.prototype = {
 };
 
 var Modal = React.createClass({
+  handleClose: function() {
+    if (this.props.close)
+      this.props.close();
+  },
+
   render: function() {
     return (
-      <div className="kept-modal-bg">
-        <div className="kept-modal">
-          <Panel title={this.props.title}>
-            {this.props.children}
-          </Panel>
+      <div style={{display: "block"}} className="modal" tabindex="-1" role="dialog"
+           aria-labelledby="myModalLabel" aria-hidden="false">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <button type="button" className="close" data-dismiss="modal" aria-hidden="true"
+                      onClick={this.handleClose}>&times;</button>
+              <h4 className="modal-title">{this.props.title}</h4>
+            </div>
+            <div className="modal-body">
+              {this.props.children}
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" className="btn btn-primary">Save changes</button>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -143,18 +160,12 @@ var KeptMenuBar = React.createClass({
       <nav className="navbar navbar-default" role="navigation">
         <div className="container-fluid">
           <div className="navbar-header">
-            <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#menu">
-              <span className="sr-only">Toggle navigation</span>
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-            </button>
             <a className="navbar-brand" href="#">Kept</a>
           </div>
-          <div className="collapse navbar-collapse" id="menu">
+          <div>
             <ul className="nav navbar-nav">
-              <li><a href="#" onClick={this.newItem("text")}>New Text</a></li>
-              <li><a href="#" onClick={this.newItem("todo")}>New Todo</a></li>
+              <li><a href="#" onClick={this.newItem("text")}>Text</a></li>
+              <li><a href="#" onClick={this.newItem("todo")}>Todo</a></li>
             </ul>
           </div>
         </div>
@@ -326,7 +337,7 @@ var KeptTextForm = React.createClass({
   render: function() {
     var data = this.props.data;
     return (
-      <Modal title="Create new Text">
+      <Modal title="Create new Text" close={this.props.resetForm}>
         <form role="form" onSubmit={this.handleSubmit}>
           <input type="hidden" ref="id" defaultValue={data.id} />
           <div className="form-group">
@@ -512,7 +523,7 @@ var KeptTodoForm = React.createClass({
   render: function() {
     console.log("---");
     return (
-      <Modal title="Create new Todo">
+      <Modal title="Create new Todo" close={this.props.resetForm}>
         <form className="todo-form" role="form" onSubmit={this.handleSubmit}>
           <input type="hidden" ref="id" defaultValue={this.props.data.id} />
           <div className="form-group">
@@ -556,10 +567,10 @@ var KeptTodoTaskForm = React.createClass({
       <li className="form-inline list-group-item form-group">
         <input ref="done" type="checkbox" onChange={this.handleUpdate} checked={data.done ? "checked" : ""} />
         &nbsp;&nbsp;&nbsp;
-        <input ref="label" type="text" className="form-control" size="100" placeholder="Label…" defaultValue={data.label}
+        <input ref="label" type="text" className="form-control" placeholder="Label…" defaultValue={data.label}
                onBlur={this.handleUpdate} />
         &nbsp;&nbsp;&nbsp;
-        <a className="btn btn-danger" onClick={this.handleRemove}>
+        <a className="danger" href="#" onClick={this.handleRemove} title="Remove task">
           <span className="glyphicon glyphicon-remove"></span>
         </a>
       </li>
