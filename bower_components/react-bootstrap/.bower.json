@@ -1,0 +1,19 @@
+{
+  "name": "react-bootstrap",
+  "version": "0.10.1",
+  "main": [
+    "react-bootstrap.min.js",
+    "index.js"
+  ],
+  "ignore": [],
+  "homepage": "https://github.com/react-bootstrap/react-bootstrap-bower",
+  "_release": "0.10.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.10.1",
+    "commit": "e23cda3748d8d32886b4056481bf228f02245d2a"
+  },
+  "_source": "git://github.com/react-bootstrap/react-bootstrap-bower.git",
+  "_target": "~0.10.1",
+  "_originalSource": "react-bootstrap"
+}
