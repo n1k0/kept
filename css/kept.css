@@ -63,10 +63,10 @@ body {
   -moz-break-inside: avoid;
   break-inside: avoid;
 }
-  .kept-panel header {
+  .kept-panel h3 {
     cursor: move;
   }
-    .kept-modal .kept-panel header {
+    .kept-modal .kept-panel h3 {
       cursor: default;
     }
     .kept-panel h3 a {
