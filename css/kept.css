@@ -69,6 +69,11 @@ body {
     .kept-modal .kept-panel header {
       cursor: default;
     }
+    .kept-panel h3 a {
+      display: block;
+      float: right;
+      margin-left: .5em;
+    }
 
 .targetted {
   border: 1px dashed #333;

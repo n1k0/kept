@@ -2,11 +2,31 @@
 
 var initial = [
   {id: 1, type: "text", title: "This is a Text entry", text: "Hello World."},
-  {id: 2, type: "todo", title: "This is a Todo entry", tasks: [
-    {label: "Plop", done: false},
-    {label: "Plap", done: true}
+  {id: 2, type: "text", title: "Lorem ipsum dolor sit amet",
+   text: "Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."},
+  {id: 3, type: "todo", title: "Today", tasks: [
+    {label: "Walk the dog", done: true},
+    {label: "Clean the car", done: false},
+    {label: "Buy a new carpet", done: false}
+  ]},
+  {id: 4, type: "text", title: "Ut enim ad minim veniam",
+   text: "Quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."},
+  {id: 5, type: "text", title: "Duis aute irure",
+   text: "Dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."},
+  {id: 6, type: "text", title: "Excepteur sint occaecat",
+   text: "Cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."},
+  {id: 7, type: "todo", title: "Trip to Paris", tasks: [
+    {label: "Buy cheese", done: false},
+    {label: "Buy more cheese", done: false},
+    {label: "See Eiffel Tower", done: false},
+    {label: "Buy even more cheese", done: false}
   ]}
 ];
+
+var Glyphicon   = ReactBootstrap.Glyphicon,
+    Modal       = ReactBootstrap.Modal,
+    Panel       = ReactBootstrap.Panel,
+    ProgressBar = ReactBootstrap.ProgressBar;
 
 function nextId(items) {
   return Math.max.apply(null, items.concat([0]).map(function(item) {
@@ -38,34 +58,9 @@ KeptStore.prototype = {
   }
 };
 
-var Modal = React.createClass({
-  handleClose: function() {
-    if (this.props.close)
-      this.props.close();
-  },
-
+var GlyphiconLink = React.createClass({
   render: function() {
-    return (
-      <div style={{display: "block"}} className="modal" tabindex="-1" role="dialog"
-           aria-labelledby="myModalLabel" aria-hidden="false">
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <button type="button" className="close" data-dismiss="modal" aria-hidden="true"
-                      onClick={this.handleClose}>&times;</button>
-              <h4 className="modal-title">{this.props.title}</h4>
-            </div>
-            <div className="modal-body">
-              {this.props.children}
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" className="btn btn-primary">Save changes</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return this.transferPropsTo(<a><Glyphicon glyph={this.props.glyph} /></a>);
   }
 });
 
@@ -86,6 +81,11 @@ var KeptApp = React.createClass({
     todo: function(data) {
       return <KeptTodoForm resetForm={this.resetForm} create={this.create} update={this.update} data={data} />;
     }
+  },
+
+  loadSamples: function() {
+    this.store.save(initial);
+    this.setState({items: initial});
   },
 
   formCreator: function(type) {
@@ -137,7 +137,7 @@ var KeptApp = React.createClass({
   render: function() {
     return (
       <div>
-        <KeptMenuBar formCreator={this.formCreator} />
+        <KeptMenuBar formCreator={this.formCreator} loadSamples={this.loadSamples} />
         {this.state.form}
         <KeptItems items={this.state.items}
                    edit={this.edit}
@@ -166,6 +166,7 @@ var KeptMenuBar = React.createClass({
             <ul className="nav navbar-nav">
               <li><a href="#" onClick={this.newItem("text")}>Text</a></li>
               <li><a href="#" onClick={this.newItem("todo")}>Todo</a></li>
+              <li><a href="#" onClick={this.props.loadSamples}>Load samples</a></li>
             </ul>
           </div>
         </div>
@@ -185,47 +186,6 @@ var KeptItems = React.createClass({
                   move={this.props.move} />
       }.bind(this))
     }</div>
-  }
-});
-
-var IconButton = React.createClass({
-  getDefaultProps: function() {
-    return {
-      type: "default",
-      icon: undefined,
-      label: "Button"
-    };
-  },
-
-  render: function() {
-    var btnClass = "btn btn-sm btn-" + this.props.type;
-    var iconClass = "glyphicon glyphicon-" + this.props.icon;
-    return (
-      <button className={btnClass} onClick={this.props.onClick}>
-        <span className={iconClass}></span>&nbsp;{this.props.label}
-      </button>
-    );
-  }
-});
-
-var Panel = React.createClass({
-  render: function() {
-    var editBtn, deleteBtn;
-    if (this.props.edit)
-      editBtn = <IconButton icon="edit" label="Edit" onClick={this.props.edit} />;
-    if (this.props.delete)
-      deleteBtn = <IconButton icon="trash" type="danger" label="Delete" onClick={this.props.delete} />;
-    return (
-      <div className="kept-panel panel panel-primary">
-        <header className="panel-heading">
-          <h3 className="panel-title">{this.props.title}</h3>
-        </header>
-        <section className="panel-body">{this.props.children}</section>
-        <footer className="panel-footer">
-          <div className="btn-group">{editBtn} {deleteBtn}</div>
-        </footer>
-      </div>
-    );
   }
 });
 
@@ -249,7 +209,13 @@ var KeptEntry = React.createClass({
   },
 
   handleClickDelete: function() {
-    this.props.remove(this.props.itemData);
+    if (!confirm("Are you sure?"))
+       return;
+    this.getDOMNode().classList.add("fade");
+    this.timeout = setTimeout(function() {
+      this.getDOMNode().classList.remove("fade"); // just don't ask.
+      this.props.remove(this.props.itemData);
+    }.bind(this), 250); // .fade has a 250ms animation
   },
 
   handleDragStart: function(event) {
@@ -286,16 +252,22 @@ var KeptEntry = React.createClass({
   },
 
   render: function() {
+    var panelHeader = (
+      <h3>
+        {this.props.itemData.title || "Untitled"}
+        <GlyphiconLink href="#" glyph="trash" onClick={this.handleClickDelete} />
+        <GlyphiconLink href="#" glyph="edit" onClick={this.handleClickEdit} />
+      </h3>
+    );
     return (
-      <div onDragStart={this.handleDragStart}
+      <div className="kept-panel"
+           onDragStart={this.handleDragStart}
            onDragEnter={this.handleDragEnter}
            onDragOver={this.handleOnDragOver}
            onDrop={this.handleOnDrop}
            onDragLeave={this.handleDragLeave}
            draggable="true">
-        <Panel title={this.props.itemData.title || "Untitled"}
-               edit={this.handleClickEdit}
-               delete={this.handleClickDelete}>
+        <Panel bsStyle="primary" header={panelHeader}>
           {this.getComponent(this.props.itemData)}
         </Panel>
       </div>
@@ -337,46 +309,24 @@ var KeptTextForm = React.createClass({
   render: function() {
     var data = this.props.data;
     return (
-      <Modal title="Create new Text" close={this.props.resetForm}>
+      <Modal title="Create new Text" onRequestHide={this.props.resetForm} animation={false}>
         <form role="form" onSubmit={this.handleSubmit}>
-          <input type="hidden" ref="id" defaultValue={data.id} />
-          <div className="form-group">
-            <input ref="title" type="text" className="form-control" placeholder="Title" defaultValue={data.title} />
+          <div className="modal-body">
+            <input type="hidden" ref="id" defaultValue={data.id} />
+            <div className="form-group">
+              <input ref="title" type="text" className="form-control" placeholder="Title" defaultValue={data.title} />
+            </div>
+            <div className="form-group">
+              <textarea ref="text" className="form-control" placeholder="Text…" defaultValue={data.text} rows="5" required />
+            </div>
           </div>
-          <div className="form-group">
-            <textarea ref="text" className="form-control" placeholder="Text…" defaultValue={data.text} rows="5" required />
-          </div>
-          <div className="form-group">
-            <button type="submit" className="btn btn-primary">OK</button>
+          <div className="modal-footer form-group">
+            <button type="submit" className="btn btn-primary">Save</button>
             &nbsp;
             <a href="#" onClick={this.handleCancel}>Cancel</a>
           </div>
         </form>
       </Modal>
-    );
-  }
-});
-
-var ProgressBar = React.createClass({
-  getDefaultProps: function() {
-    return {
-      minValue: 0,
-      maxValue: 100
-    };
-  },
-
-  render: function() {
-    return (
-      <div className="progress">
-        <div className="progress-bar"
-             role="progressbar"
-             aria-valuenow={this.props.value}
-             aria-valuemin={this.props.minValue}
-             aria-valuemax={this.props.maxValue}
-             style={{width: this.props.value + "%"}}>
-          <span>{this.props.value}%</span>
-        </div>
-      </div>
     );
   }
 });
@@ -426,10 +376,9 @@ var KeptTodo = React.createClass({
   },
 
   render: function() {
-    var progress = 60;
     return (
       <div>
-        <ProgressBar value={this.getProgress()} />
+        <ProgressBar now={this.getProgress()} label="%(percent)s%" />
         <ul className="list-group">{
           this.state.tasks.map(function(task, key) {
             return <KeptTodoTask key={key} data={task} toggle={this.toggle} />
@@ -523,18 +472,20 @@ var KeptTodoForm = React.createClass({
   render: function() {
     console.log("---");
     return (
-      <Modal title="Create new Todo" close={this.props.resetForm}>
+      <Modal title="Create new Todo" onRequestHide={this.props.resetForm} animation={false}>
         <form className="todo-form" role="form" onSubmit={this.handleSubmit}>
-          <input type="hidden" ref="id" defaultValue={this.props.data.id} />
-          <div className="form-group">
-            <input ref="title" type="text" className="form-control" placeholder="Title" defaultValue={this.props.data.title} />
+          <div className="modal-body">
+            <input type="hidden" ref="id" defaultValue={this.props.data.id} />
+            <div className="form-group">
+              <input ref="title" type="text" className="form-control" placeholder="Title" defaultValue={this.props.data.title} />
+            </div>
+            <ul className="list-group">{
+              this.state.tasks.map(function(task, key) {
+                return <KeptTodoTaskForm key={key} data={task} updateTask={this.updateTask} removeTask={this.removeTask} />
+              }, this)
+            }</ul>
           </div>
-          <ul className="list-group">{
-            this.state.tasks.map(function(task, key) {
-              return <KeptTodoTaskForm key={key} data={task} updateTask={this.updateTask} removeTask={this.removeTask} />
-            }, this)
-          }</ul>
-          <div className="form-group">
+          <div className="modal-footer form-group">
             <button className="btn btn-default" onClick={this.addTask}>Add task</button>
             &nbsp;
             <button className="btn btn-primary" type="submit">Save</button>

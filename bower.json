@@ -1,0 +1,28 @@
+{
+  "name": "kept",
+  "version": "0.0.1",
+  "homepage": "https://github.com/n1k0/kept",
+  "authors": [
+    "Nicolas Perriault <nicolas@perriault.net>"
+  ],
+  "description": "Personal rich notes HTML app inspired by Google Keep",
+  "main": "index.html",
+  "keywords": [
+    "react",
+    "bootstrap",
+    "todo"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "react-bootstrap": "~0.10.1",
+    "bootstrap": "~3.1.1",
+    "react": "~0.10.0"
+  }
+}
