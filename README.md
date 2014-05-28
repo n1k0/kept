@@ -18,9 +18,23 @@ Install [Bower](http://bower.io/):
 
     $ npm install -g bower
 
+Install [Gulp](http://gulpjs.com/):
+
+    $ npm install -g gulp
+
 Install Kept dependencies:
 
-    $ bower install
+    $ npm install
+    $ npm run bower
+
+The project provide a gulp file to ease the development.
+
+    $ gulp dev
+To launch a local server with livereload
+
+    $ gulp dist
+
+To build a minify version of kept.
 
 Serve index.html. A [working demo is also available online](http://n1k0.github.io/kept/).
 
