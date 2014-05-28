@@ -114,6 +114,5 @@ gulp.task('watch', ['dev'], function(){
     });
 });
 
-gulp.task('dev', ['assets', 'transpile']);
 gulp.task('dist', ['assets', 'uglify']);
 gulp.task('default', ['server', 'watch']);

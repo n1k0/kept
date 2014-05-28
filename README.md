@@ -30,7 +30,7 @@ Install Kept dependencies:
 The project provide a gulp file to ease the development.
 To launch a local server with livereload
 
-    $ gulp dev
+    $ gulp
 
 To build a minify version of kept.
 
