@@ -11,6 +11,10 @@ body {
   margin-left: .5em;
 }
 
+.kept-default button {
+  margin-left: .35em;
+}
+
 .kept-list {
   height: 100%;
 }
