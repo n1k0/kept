@@ -30,6 +30,17 @@ var Button      = ReactBootstrap.Button,
     Panel       = ReactBootstrap.Panel,
     ProgressBar = ReactBootstrap.ProgressBar;
 
+marked.setOptions({
+  renderer: new marked.Renderer(),
+  gfm: true,
+  tables: true,
+  breaks: false,
+  pedantic: false,
+  sanitize: true,
+  smartLists: true,
+  smartypants: false
+});
+
 function nextId(items) {
   return Math.max.apply(null, items.concat([0]).map(function(item) {
     return item.id || 0;
@@ -305,10 +316,10 @@ var KeptEntry = React.createClass({
 
 var KeptText = React.createClass({
   render: function() {
-    var data = this.props.data;
     return (
       <div className="text-entry">
-        <div className="text-entry-text">{data.text}</div>
+        <div className="text-entry-text"
+             dangerouslySetInnerHTML={{__html: marked(this.props.data.text)}} />
       </div>
     );
   }
@@ -345,7 +356,7 @@ var KeptTextForm = React.createClass({
               <input ref="title" type="text" className="form-control" placeholder="Title" defaultValue={data.title} />
             </div>
             <div className="form-group">
-              <textarea ref="text" className="form-control" placeholder="Text…" defaultValue={data.text} rows="5" required />
+              <textarea ref="text" className="form-control" placeholder="Text (accept markdown contents)…" defaultValue={data.text} rows="8" required />
             </div>
           </div>
           <div className="modal-footer form-group">
