@@ -4,8 +4,6 @@
   "description": "Personal rich notes HTML app inspired by Google Keep",
   "main": "index.js",
   "scripts": {
-    "bower": "bower install",
-    "dev":   "gulp",
     "test":  "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
