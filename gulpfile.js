@@ -15,7 +15,12 @@ var opt = {
     livereload: 31357
   },
 
+  fontAssets:[
+    'bower_components/bootstrap/fonts/*'
+  ],
+
   cssAssets: [
+    'bower_components/bootstrap/dist/css/bootstrap.min.css',
     'bower_components/bootstrap/dist/css/bootstrap.min.css',
     'css/kept.css'
   ],
@@ -41,11 +46,16 @@ var opt = {
 /**
  * Assets tasks
  */
-gulp.task('assets',['assets:html', 'assets:js', 'assets:css']);
+gulp.task('assets',['assets:html', 'assets:js', 'assets:fonts', 'assets:css']);
 
 gulp.task('assets:html', function(){
   return gulp.src(opt.htmlAssets)
     .pipe(gulp.dest(opt.outputFolder));
+});
+
+gulp.task('assets:fonts', function(){
+  return gulp.src(opt.fontAssets)
+    .pipe(gulp.dest(opt.outputFolder+'/fonts'));
 });
 
 gulp.task('assets:js', function(){
@@ -66,9 +76,11 @@ gulp.task('transpile' , function(){
     .pipe(gulp.dest(opt.outputFolder+'/js'));
 });
 
-gulp.task('uglify' ,['transpile'], function(){
-  return gulp.src(opt.mainJs.dist)
-    .pipe(uglify() )
+gulp.task('uglify' , function(){
+  return gulp.src(opt.mainJs.src)
+    .pipe(plumber())
+    .pipe(react())
+    .pipe(uglify())
     .pipe(gulp.dest(opt.outputFolder+'/js'));
 });
 
@@ -103,5 +115,5 @@ gulp.task('watch', ['dev'], function(){
 });
 
 gulp.task('dev', ['assets', 'transpile']);
-gulp.task('dist', ['assets', 'transpile', 'uglify']);
+gulp.task('dist', ['assets', 'uglify']);
 gulp.task('default', ['server', 'watch']);
