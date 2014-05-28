@@ -18,15 +18,15 @@ Install Kept dependencies:
 
     $ npm install
 
-To launch a local server with livereload
+To launch a local server with live reload:
 
     $ npm start
 
-To build a minify version of kept.
+To build a minify version of kept:
 
     $ npm run dist
 
-The projet use [bower](http://bower.io) and [gulpjs](http://gulpjs.com)
+The projet uses [bower](http://bower.io) and [gulpjs](http://gulpjs.com).
 
 A [working demo is also available online](http://n1k0.github.io/kept/).
 
