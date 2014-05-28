@@ -28,13 +28,14 @@ Install Kept dependencies:
     $ bower install
 
 The project provide a gulp file to ease the development.
+To launch a local server with livereload
 
     $ gulp dev
-To launch a local server with livereload
+
+To build a minify version of kept.
 
     $ gulp dist
 
-To build a minify version of kept.
 
 Serve index.html. A [working demo is also available online](http://n1k0.github.io/kept/).
 
