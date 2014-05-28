@@ -1,0 +1,35 @@
+{
+  "name": "kept",
+  "version": "0.0.1",
+  "description": "Personal rich notes HTML app inspired by Google Keep",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "bower install",
+    "start": "gulp",
+    "dist": "gulp dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/n1k0/kept"
+  },
+  "keywords": [
+    "react",
+    "bootstrap",
+    "todo"
+  ],
+  "author": "Nicolas Perriault <nicolas@perriault.net>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/n1k0/kept/issues"
+  },
+  "homepage": "https://github.com/n1k0/kept",
+  "dependencies": {
+    "bower": "^1.3.3",
+    "gulp": "^3.6.2",
+    "gulp-react": "^0.3.3",
+    "gulp-plumber": "^0.6.2",
+    "gulp-uglify": "^0.3.0",
+    "gulp-connect": "^2.0.5"
+  }
+}
