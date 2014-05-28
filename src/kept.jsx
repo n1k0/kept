@@ -23,7 +23,9 @@ var initial = [
   ]}
 ];
 
-var Glyphicon   = ReactBootstrap.Glyphicon,
+var Button      = ReactBootstrap.Button,
+    Glyphicon   = ReactBootstrap.Glyphicon,
+    Jumbotron   = ReactBootstrap.Jumbotron,
     Modal       = ReactBootstrap.Modal,
     Panel       = ReactBootstrap.Panel,
     ProgressBar = ReactBootstrap.ProgressBar;
@@ -94,6 +96,10 @@ var KeptApp = React.createClass({
     }.bind(this);
   },
 
+  newItem: function(type) {
+    return this.formCreator(type).bind(null, {});
+  },
+
   resetForm: function() {
     this.setState({form: null});
   },
@@ -137,9 +143,12 @@ var KeptApp = React.createClass({
   render: function() {
     return (
       <div>
-        <KeptMenuBar formCreator={this.formCreator} loadSamples={this.loadSamples} />
+        <KeptMenuBar newItem={this.newItem}
+                     loadSamples={this.loadSamples} />
         {this.state.form}
         <KeptItems items={this.state.items}
+                   newItem={this.newItem}
+                   loadSamples={this.loadSamples}
                    edit={this.edit}
                    update={this.update}
                    remove={this.remove}
@@ -150,10 +159,6 @@ var KeptApp = React.createClass({
 });
 
 var KeptMenuBar = React.createClass({
-  newItem: function(type) {
-    return this.props.formCreator(type).bind(null, {});
-  },
-
   render: function() {
     // FIXME responsive menu display not available without jQuery -_-'
     return (
@@ -164,8 +169,8 @@ var KeptMenuBar = React.createClass({
           </div>
           <div>
             <ul className="nav navbar-nav">
-              <li><a href="#" onClick={this.newItem("text")}>Text</a></li>
-              <li><a href="#" onClick={this.newItem("todo")}>Todo</a></li>
+              <li><a href="#" onClick={this.props.newItem("text")}>Text</a></li>
+              <li><a href="#" onClick={this.props.newItem("todo")}>Todo</a></li>
               <li><a href="#" onClick={this.props.loadSamples}>Load samples</a></li>
             </ul>
           </div>
@@ -175,17 +180,40 @@ var KeptMenuBar = React.createClass({
   }
 });
 
+var DefaultContent = React.createClass({
+  render: function() {
+    return (
+      <Jumbotron className="kept-default">
+        <h1>Welcome to Kept</h1>
+        <p>Your list is currently empty.</p>
+        <p>You can create
+          a <a href="#" onClick={this.props.newItem("text")}>Text</a>,
+          a <a href="#" onClick={this.props.newItem("todo")}>Todo</a> or
+          <Button bsStyle="success" bsSize="large"
+                  onClick={this.props.loadSamples}>Load samples</Button>.
+        </p>
+      </Jumbotron>
+    );
+  }
+});
+
 var KeptItems = React.createClass({
   render: function() {
-    return <div className="kept-list">{
-      this.props.items.map(function(itemData, key) {
-        return <KeptEntry key={key} itemData={itemData}
-                  edit={this.props.edit}
-                  remove={this.props.remove}
-                  update={this.props.update}
-                  move={this.props.move} />
-      }.bind(this))
-    }</div>
+    if (!this.props.items.length) {
+      return <DefaultContent newItem={this.props.newItem}
+                             loadSamples={this.props.loadSamples} />;
+    }
+    return (
+      <div className="kept-list">{
+        this.props.items.map(function(itemData, key) {
+          return <KeptEntry key={key} itemData={itemData}
+                    edit={this.props.edit}
+                    remove={this.props.remove}
+                    update={this.props.update}
+                    move={this.props.move} />
+        }.bind(this))
+      }</div>
+    );
   }
 });
 
