@@ -14,18 +14,22 @@ are in the pipe.
 Install
 -------
 
-Install [Bower](http://bower.io/):
-
-    $ npm install -g bower
-
 Install Kept dependencies:
 
-    $ bower install
+    $ npm install
 
-Serve index.html. A [working demo is also available online](http://n1k0.github.io/kept/).
+To launch a local server with livereload
 
-**Note:** Kept currently uses the live React JSX parser, which is slow but helpful
-while hacking on this project.
+    $ npm start
+
+To build a minify version of kept.
+
+    $ npm run dist
+
+The projet use [bower](http://bower.io) and [gulpjs](http://gulpjs.com)
+
+A [working demo is also available online](http://n1k0.github.io/kept/).
+
 
 License
 -------
