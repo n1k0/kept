@@ -67,10 +67,10 @@ body {
   -moz-break-inside: avoid;
   break-inside: avoid;
 }
-  .kept-panel h3 {
+  .kept-panel .panel-heading {
     cursor: move;
   }
-    .kept-modal .kept-panel h3 {
+    .kept-modal .kept-panel .panel-heading {
       cursor: default;
     }
     .kept-panel h3 a {
