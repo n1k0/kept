@@ -4,7 +4,7 @@ Kept
 Personal rich notes HTML app inspired by [Google Keep](https://keep.google.com/)
 and powered by [React](http://facebook.github.io/react/).
 
-![](http://cl.ly/image/0S2K1D41441M/Screen%20Shot%202014-05-27%20at%2020.36.13.png)
+[![](http://cl.ly/image/0S2K1D41441M/Screen%20Shot%202014-05-27%20at%2020.36.13.png)](http://n1k0.github.io/kept/)
 
 For now, data are stored using `localStorage`. Full mobile compatibility & Sync
 are in the pipe.
@@ -22,13 +22,15 @@ To launch a local server with live reload:
 
     $ npm start
 
-To build a minify version of kept:
+Point your browser at localhost:4000 and start hacking.
+
+To build an optimized version of Kept:
 
     $ npm run dist
 
-The projet uses [bower](http://bower.io) and [gulpjs](http://gulpjs.com).
+The resulting files are then available in the `build` folder.
 
-A [working demo is also available online](http://n1k0.github.io/kept/).
+A [working demo](http://n1k0.github.io/kept/) is also available.
 
 
 License

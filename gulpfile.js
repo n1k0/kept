@@ -27,7 +27,8 @@ var opt = {
 
   jsAssets: [
     'bower_components/react/react.min.js',
-    'bower_components/react-bootstrap/react-bootstrap.min.js'
+    'bower_components/react-bootstrap/react-bootstrap.min.js',
+    'bower_components/marked/lib/marked.js',
   ],
 
   htmlAssets: [
@@ -38,10 +39,7 @@ var opt = {
     src:'src/kept.jsx',
     dist: 'dist/js/kept.js'
   }
-
 };
-
-
 
 /**
 * Assets tasks
