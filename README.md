@@ -22,7 +22,8 @@ To launch a local server with live reload:
 
     $ npm start
 
-Point your browser at localhost:4000 and start hacking.
+Point your browser at [localhost:4000](http://localhost:4000) and start hacking
+Kept files, a rebuild will be performed automatically in the background.
 
 To build an optimized version of Kept:
 
@@ -31,7 +32,6 @@ To build an optimized version of Kept:
 The resulting files are then available in the `build` folder.
 
 A [working demo](http://n1k0.github.io/kept/) is also available.
-
 
 License
 -------

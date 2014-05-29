@@ -1,44 +1,43 @@
 /* jshint node:true */
+
 "use strict";
 
 var gulp = require("gulp");
-var react = require("gulp-react");
-var plumber = require("gulp-plumber");
-var uglify = require("gulp-uglify");
+var concat = require("gulp-concat");
+var browserify = require('gulp-browserify');
+var uglify = require('gulp-uglify');
+var rename = require('gulp-rename');
 var connect = require("gulp-connect");
 var deploy = require("gulp-gh-pages");
 
 var opt = {
   outputFolder: "build",
 
-  server:{
+  server: {
     port: 4000,
     livereload: 31357
   },
 
-  fontAssets: [
-    "bower_components/bootstrap/fonts/*"
+  cssAssets: [
+    "src/css/bootstrap.min.css",
+    "src/css/kept.css"
   ],
 
-  cssAssets: [
-    "bower_components/bootstrap/dist/css/bootstrap.min.css",
-    "bower_components/bootstrap/dist/css/bootstrap.min.css",
-    "css/kept.css"
+  fontAssets: [
+    "src/fonts/*"
   ],
 
   jsAssets: [
-    "bower_components/react/react.min.js",
-    "bower_components/react-bootstrap/react-bootstrap.min.js",
-    "bower_components/marked/lib/marked.js",
+    "src/js/**/*.*"
   ],
 
   htmlAssets: [
-    "index.html"
+    "src/index.html"
   ],
 
-  mainJs:{
-    src:  "src/kept.jsx",
-    dist: "dist/js/kept.js"
+  mainJs: {
+    src: "src/js/kept.jsx",
+    dest: "js/kept.js"
   }
 };
 
@@ -47,9 +46,9 @@ var opt = {
  */
 gulp.task("assets", [
   "assets:html",
-  "assets:js",
   "assets:fonts",
-  "assets:css"
+  "assets:css",
+  "assets:js"
 ]);
 
 gulp.task("assets:html", function() {
@@ -57,14 +56,14 @@ gulp.task("assets:html", function() {
     .pipe(gulp.dest(opt.outputFolder));
 });
 
-gulp.task("assets:fonts", function() {
-  return gulp.src(opt.fontAssets)
-    .pipe(gulp.dest(opt.outputFolder + "/fonts"));
-});
-
 gulp.task("assets:js", function() {
-  return gulp.src(opt.jsAssets)
-    .pipe(gulp.dest(opt.outputFolder + "/js/lib"));
+  return gulp.src(opt.mainJs.src, {read: false})
+    .pipe(browserify({
+      transform:  ["reactify"],
+      extensions: [".jsx"]
+    }))
+    .pipe(rename("kept.js"))
+    .pipe(gulp.dest(opt.outputFolder + "/js"));
 });
 
 gulp.task("assets:css", function() {
@@ -72,30 +71,20 @@ gulp.task("assets:css", function() {
     .pipe(gulp.dest(opt.outputFolder + "/css"));
 });
 
-
-gulp.task("transpile", function() {
-  return gulp.src(opt.mainJs.src)
-    .pipe(plumber())
-    .pipe(react())
-    .pipe(gulp.dest(opt.outputFolder + "/js"));
-});
-
-gulp.task("uglify", ["transpile"], function() {
-  return gulp.src(opt.mainJs.dist)
-    .pipe(plumber())
-    .pipe(uglify())
-    .pipe(gulp.dest(opt.outputFolder + "/js"));
+gulp.task("assets:fonts", function() {
+  return gulp.src(opt.fontAssets)
+    .pipe(gulp.dest(opt.outputFolder + "/fonts"));
 });
 
 /**
  * Server task
  */
 gulp.task("server", function() {
-  connect.server({
+  return connect.server({
     root: opt.outputFolder,
     port: opt.server.port,
     livereload: {
-      port:opt.livereload
+      port: opt.livereload
     }
   });
 });
@@ -104,21 +93,23 @@ gulp.task("server", function() {
  * Watch task
  * Launch a server with livereload
  */
-gulp.task("watch", ["assets", "transpile"], function() {
-  gulp.watch(opt.cssAssets, ["assets:css"]);
-  gulp.watch(opt.jsAssets, ["assets:js"]);
+gulp.task("watch", ["assets"], function() {
+  gulp.watch(opt.cssAssets,  ["assets:css"]);
+  gulp.watch(opt.fontAssets, ["assets:fonts"]);
+  gulp.watch(opt.jsAssets,   ["assets:js"]);
   gulp.watch(opt.htmlAssets, ["assets:html"]);
-  gulp.watch(opt.mainJs.src, ["transpile"]);
 
   gulp.watch([opt.outputFolder + "/**/*.*"])
     .on("change", function() {
-      // trigger the live reload server
       gulp.src("").pipe(connect.reload());
     });
 });
 
-gulp.task("dist", ["assets", "transpile", "uglify"]);
-gulp.task("default", ["server", "watch"]);
+gulp.task("dist", ["assets"], function() {
+  return gulp.src("build/" + opt.mainJs.dest)
+    .pipe(uglify())
+    .pipe(gulp.dest(opt.outputFolder + "/js"));
+});
 
 /**
  * Deploy to gh-pages
@@ -127,3 +118,5 @@ gulp.task("deploy", ["dist"], function() {
   gulp.src("./build/**/*")
       .pipe(deploy("git@github.com:n1k0/kept.git"));
 });
+
+gulp.task("default", ["server", "watch"]);
