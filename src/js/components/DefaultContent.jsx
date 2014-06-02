@@ -1,6 +1,7 @@
 /** @jsx React.DOM */
 
 var React = require("react");
+var Button = require("react-bootstrap").Button;
 var Jumbotron = require("react-bootstrap").Jumbotron;
 
 var DefaultContent = React.createClass({
