@@ -2,6 +2,7 @@
 
 var React = require("react");
 var KeptEntry = require("./KeptEntry");
+var DefaultContent = require("./DefaultContent");
 
 var KeepItems = React.createClass({
   render: function() {
