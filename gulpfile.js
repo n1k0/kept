@@ -3,10 +3,9 @@
 "use strict";
 
 var gulp = require("gulp");
-var concat = require("gulp-concat");
-var browserify = require('gulp-browserify');
+var browserify = require('browserify');
+var source = require('vinyl-source-stream');
 var uglify = require('gulp-uglify');
-var rename = require('gulp-rename');
 var connect = require("gulp-connect");
 var deploy = require("gulp-gh-pages");
 
@@ -35,10 +34,11 @@ var opt = {
     "src/index.html"
   ],
 
-  mainJs: {
-    src: "src/js/kept.jsx",
-    dest: "js/kept.js"
-  }
+  app: {
+    src: "src/js/kept.js",
+    dest: "kept.js"
+  },
+  vendors: "vendors.js"
 };
 
 /**
@@ -47,23 +47,12 @@ var opt = {
 gulp.task("assets", [
   "assets:html",
   "assets:fonts",
-  "assets:css",
-  "assets:js"
+  "assets:css"
 ]);
 
 gulp.task("assets:html", function() {
   return gulp.src(opt.htmlAssets)
     .pipe(gulp.dest(opt.outputFolder));
-});
-
-gulp.task("assets:js", function() {
-  return gulp.src(opt.mainJs.src, {read: false})
-    .pipe(browserify({
-      transform:  ["reactify"],
-      extensions: [".jsx"]
-    }))
-    .pipe(rename("kept.js"))
-    .pipe(gulp.dest(opt.outputFolder + "/js"));
 });
 
 gulp.task("assets:css", function() {
@@ -75,6 +64,37 @@ gulp.task("assets:fonts", function() {
   return gulp.src(opt.fontAssets)
     .pipe(gulp.dest(opt.outputFolder + "/fonts"));
 });
+
+/**
+ * JS tasks
+ */
+
+gulp.task("js", [
+  "js:vendors",
+  "js:app"
+  ]);
+
+gulp.task("js:app", ["js:vendors"], function() {
+  return browserify("./" + opt.app.src)
+    .transform("reactify")
+    .external("react")
+    .external("react-bootstrap")
+    .external("marked")
+    .bundle()
+    .pipe(source(opt.app.dest))
+    .pipe(gulp.dest(opt.outputFolder + "/js"));
+});
+
+gulp.task("js:vendors", function() {
+  return browserify()
+    .require("react")
+    .require("react-bootstrap")
+    .require("marked")
+    .bundle()
+    .pipe(source(opt.vendors))
+    .pipe(gulp.dest(opt.outputFolder + "/js"));
+});
+
 
 /**
  * Server task
@@ -93,10 +113,10 @@ gulp.task("server", function() {
  * Watch task
  * Launch a server with livereload
  */
-gulp.task("watch", ["assets"], function() {
+gulp.task("watch", ["assets", "js"], function() {
   gulp.watch(opt.cssAssets,  ["assets:css"]);
   gulp.watch(opt.fontAssets, ["assets:fonts"]);
-  gulp.watch(opt.jsAssets,   ["assets:js"]);
+  gulp.watch(opt.jsAssets,   ["js:app"]);
   gulp.watch(opt.htmlAssets, ["assets:html"]);
 
   gulp.watch([opt.outputFolder + "/**/*.*"])
@@ -105,8 +125,8 @@ gulp.task("watch", ["assets"], function() {
     });
 });
 
-gulp.task("dist", ["assets"], function() {
-  return gulp.src("build/" + opt.mainJs.dest)
+gulp.task("dist", ["assets", "js"], function() {
+  return gulp.src(opt.outputFolder + "/js/*.js")
     .pipe(uglify())
     .pipe(gulp.dest(opt.outputFolder + "/js"));
 });
