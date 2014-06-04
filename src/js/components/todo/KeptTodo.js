@@ -8,7 +8,7 @@ var KeptTodoTask = require("./KeptTodoTask");
 
 var KeptTodo = React.createClass({
   getInitialState: function() {
-    return {tasks: this.props.data.tasks};
+    return {tasks: this.props.data.tasks || []};
   },
 
   // this is needed to map newly received props to current state
@@ -59,7 +59,7 @@ var KeptTodo = React.createClass({
             return <KeptTodoTask key={key} data={task} toggle={this.toggle} />;
           }.bind(this))
         }</ul>
-        <p><a href="#" onClick={this.clearCompleted}>Clear completed</a></p>
+        <p><a href="#" className="clear" onClick={this.clearCompleted}>Clear completed</a></p>
       </div>
     );
   }

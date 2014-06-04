@@ -4,10 +4,9 @@
 
 var utils = require("../utils");
 var React = require("react");
-var KeptStore = require("../store");
 var UndoStack = require("../mixins/UndoStack");
-var KeptTextForm = require("./KeptTextForm");
-var KeptTodoForm = require("./KeptTodoForm");
+var KeptTextForm = require("./text/KeptTextForm");
+var KeptTodoForm = require("./todo/KeptTodoForm");
 var KeptMenuBar = require("./KeptMenuBar");
 var KeptItems = require("./KeptItems");
 var initial = require("../data/initial");
@@ -15,11 +14,9 @@ var initial = require("../data/initial");
 var KeptApp = React.createClass({
   mixins: [UndoStack],
 
-  store: new KeptStore(),
-
   getInitialState: function() {
     return {
-      items: this.store.load()
+      items: this.props.store.load()
     };
   },
 
@@ -59,7 +56,7 @@ var KeptApp = React.createClass({
   },
 
   save: function(items) {
-    this.store.save(items);
+    this.props.store.save(items);
     this.snapshot();
     this.setState({items: items});
   },

@@ -4,8 +4,8 @@
 
 var React = require("react");
 var GlyphiconLink = require("./GlyphiconLink");
-var KeptText = require("./KeptText");
-var KeptTodo = require("./KeptTodo");
+var KeptText = require("./text/KeptText");
+var KeptTodo = require("./todo/KeptTodo");
 var Panel = require("react-bootstrap").Panel;
 
 
@@ -75,8 +75,8 @@ var KeptEntry = React.createClass({
     var panelHeader = (
       <h3>
         {this.props.itemData.title || "Untitled"}
-        <GlyphiconLink href="#" glyph="trash" onClick={this.handleClickDelete} />
-        <GlyphiconLink href="#" glyph="edit" onClick={this.handleClickEdit} />
+        <GlyphiconLink className="delete" href="#" glyph="trash" onClick={this.handleClickDelete} />
+        <GlyphiconLink className="edit" href="#" glyph="edit" onClick={this.handleClickEdit} />
       </h3>
     );
     return (

@@ -1,0 +1,6 @@
+{
+  "scriptPreprocessor": "<rootDir>/preprocessor.js",
+  "unmockedModulePathPatterns": [
+    "<rootDir>/node_modules/react"
+  ]
+}

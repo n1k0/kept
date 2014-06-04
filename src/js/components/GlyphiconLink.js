@@ -5,7 +5,7 @@
 var React = require("react");
 var Glyphicon = require("react-bootstrap").Glyphicon;
 
-var GlyphIconLink = React.createClass({
+var GlyphiconLink = React.createClass({
   render: function() {
     return this.transferPropsTo(
       <a><Glyphicon glyph={this.props.glyph} /></a>
@@ -13,4 +13,4 @@ var GlyphIconLink = React.createClass({
   }
 });
 
-module.exports = GlyphIconLink;
+module.exports = GlyphiconLink;

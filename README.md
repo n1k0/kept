@@ -1,6 +1,8 @@
 Kept
 ====
 
+![https://travis-ci.org/n1k0/kept](https://travis-ci.org/n1k0/kept.svg)
+
 Personal rich notes HTML app inspired by [Google Keep](https://keep.google.com/)
 and powered by [React](http://facebook.github.io/react/).
 
@@ -36,6 +38,10 @@ A [working demo](http://n1k0.github.io/kept/) is also available.
 Code linting:
 
     $ npm run lint
+
+Tests:
+
+    $ npm test
 
 License
 -------

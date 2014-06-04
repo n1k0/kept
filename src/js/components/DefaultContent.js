@@ -7,16 +7,28 @@ var Button = require("react-bootstrap").Button;
 var Jumbotron = require("react-bootstrap").Jumbotron;
 
 var DefaultContent = React.createClass({
+  handleClickLoadSamples: function() {
+    this.props.loadSamples();
+  },
+
+  handleClickNewText: function() {
+    this.props.newItem("text")();
+  },
+
+  handleClickNewTodo: function() {
+    this.props.newItem("todo")();
+  },
+
   render: function() {
     return (
       <Jumbotron className="kept-default">
         <h1>Welcome to Kept</h1>
         <p>Your list is currently empty.</p>
         <p>You can create
-          a <a href="#" onClick={this.props.newItem("text")}>Text</a>,
-          a <a href="#" onClick={this.props.newItem("todo")}>Todo</a> or
+          a <a className="new-text" href="#" onClick={this.handleClickNewText}>Text</a>,
+          a <a className="new-todo" href="#" onClick={this.handleClickNewTodo}>Todo</a> or
           <Button bsStyle="success" bsSize="large"
-                  onClick={this.props.loadSamples}>Load samples</Button>.
+                  onClick={this.handleClickLoadSamples}>Load samples</Button>.
         </p>
       </Jumbotron>
     );
