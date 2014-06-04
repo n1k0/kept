@@ -69,7 +69,7 @@ var KeptTodoForm = React.createClass({
     console.log("---");
     return (
       <Modal title="Create new Todo" onRequestHide={this.props.resetForm} animation={false}>
-        <form className="todo-form" role="form" onSubmit={this.handleSubmit}>
+        <form className="todo-form" role="form" onSubmit={this.addTask}>
           <div className="modal-body">
             <input type="hidden" ref="id" defaultValue={this.props.data.id} />
             <div className="form-group">
@@ -82,9 +82,9 @@ var KeptTodoForm = React.createClass({
             }</ul>
           </div>
           <div className="modal-footer form-group">
-            <button className="btn btn-default" onClick={this.addTask}>Add task</button>
+            <button className="btn btn-default" type="submit">Add task</button>
             &nbsp;
-            <button className="btn btn-primary" type="submit">Save</button>
+            <button className="btn btn-primary" type="button" onClick={this.handleSubmit}>Save</button>
             &nbsp;
             <a href="#" onClick={this.handleCancel}>Cancel</a>
           </div>
