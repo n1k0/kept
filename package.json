@@ -6,6 +6,7 @@
   "scripts": {
     "deploy": "gulp deploy",
     "dist": "gulp dist",
+    "lint": "jsxhint -c .jshintrc src/js",
     "start": "gulp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -35,5 +36,8 @@
     "reactify": "^0.13.1",
     "browserify": "^4.1.8",
     "vinyl-source-stream": "^0.1.1"
+  },
+  "devDependencies": {
+    "jsxhint": "*"
   }
 }

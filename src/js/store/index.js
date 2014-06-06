@@ -1,3 +1,5 @@
+"use strict";
+
 function KeptStore(options) {
   options = options || {};
   this._store = options.store || localStorage;

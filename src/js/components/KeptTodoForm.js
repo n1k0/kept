@@ -1,5 +1,7 @@
 /** @jsx React.DOM */
 
+"use strict";
+
 var React = require("react");
 var Modal = require("react-bootstrap").Modal;
 var KeptTodoTaskForm = require("./KeptTodoTaskForm");
@@ -11,7 +13,8 @@ var KeptTodoForm = React.createClass({
 
   getInitialState: function() {
     return {
-      tasks: this.props.data && this.props.data.tasks || this.getDefaultEntries()
+      tasks: this.props.data && this.props.data.tasks ||
+             this.getDefaultEntries()
     };
   },
 
@@ -73,11 +76,13 @@ var KeptTodoForm = React.createClass({
           <div className="modal-body">
             <input type="hidden" ref="id" defaultValue={this.props.data.id} />
             <div className="form-group">
-              <input ref="title" type="text" className="form-control" placeholder="Title" defaultValue={this.props.data.title} />
+              <input ref="title" type="text" className="form-control" placeholder="Title"
+                     defaultValue={this.props.data.title} />
             </div>
             <ul className="list-group">{
               this.state.tasks.map(function(task, key) {
-                return <KeptTodoTaskForm key={key} data={task} updateTask={this.updateTask} removeTask={this.removeTask} />
+                return <KeptTodoTaskForm key={key} data={task} updateTask={this.updateTask}
+                                         removeTask={this.removeTask} />;
               }, this)
             }</ul>
           </div>

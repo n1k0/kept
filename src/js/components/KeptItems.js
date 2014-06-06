@@ -1,5 +1,7 @@
 /** @jsx React.DOM */
 
+"use strict";
+
 var React = require("react");
 var KeptEntry = require("./KeptEntry");
 var DefaultContent = require("./DefaultContent");
@@ -7,8 +9,10 @@ var DefaultContent = require("./DefaultContent");
 var KeepItems = React.createClass({
   render: function() {
     if (!this.props.items.length) {
-      return <DefaultContent newItem={this.props.newItem}
-                             loadSamples={this.props.loadSamples} />;
+      return (
+        <DefaultContent newItem={this.props.newItem}
+                        loadSamples={this.props.loadSamples} />
+      );
     }
     return (
       <div className="kept-list">{
@@ -17,7 +21,7 @@ var KeepItems = React.createClass({
                     edit={this.props.edit}
                     remove={this.props.remove}
                     update={this.props.update}
-                    move={this.props.move} />
+                    move={this.props.move} />;
         }.bind(this))
       }</div>
     );

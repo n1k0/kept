@@ -1,4 +1,7 @@
 // http://prometheusresearch.github.io/react-forms/examples/undo.html
+
+"use strict";
+
 var UndoStack = {
   getInitialState: function() {
     return {undo: [], redo: []};

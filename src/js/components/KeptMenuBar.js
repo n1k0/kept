@@ -1,10 +1,11 @@
 /** @jsx React.DOM */
 
+"use strict";
+
 var React = require("react");
 
 var KeptMenuBar = React.createClass({
   render: function() {
-    // FIXME responsive menu display not available without jQuery -_-'
     return (
       <nav className="navbar navbar-default" role="navigation">
         <div className="container-fluid">

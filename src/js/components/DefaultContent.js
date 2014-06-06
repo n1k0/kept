@@ -1,5 +1,7 @@
 /** @jsx React.DOM */
 
+"use strict";
+
 var React = require("react");
 var Button = require("react-bootstrap").Button;
 var Jumbotron = require("react-bootstrap").Jumbotron;

@@ -1,5 +1,7 @@
 /** @jsx React.DOM */
 
+"use strict";
+
 var React = require("react");
 var Modal = require("react-bootstrap").Modal;
 

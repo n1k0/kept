@@ -1,5 +1,7 @@
 /** @jsx React.DOM */
 
+"use strict";
+
 var React = require("react");
 var ProgressBar = require("react-bootstrap").ProgressBar;
 var KeptTodoTask = require("./KeptTodoTask");
@@ -54,7 +56,7 @@ var KeptTodo = React.createClass({
         <ProgressBar now={this.getProgress()} label="%(percent)s%" />
         <ul className="list-group">{
           this.state.tasks.map(function(task, key) {
-            return <KeptTodoTask key={key} data={task} toggle={this.toggle} />
+            return <KeptTodoTask key={key} data={task} toggle={this.toggle} />;
           }.bind(this))
         }</ul>
         <p><a href="#" onClick={this.clearCompleted}>Clear completed</a></p>

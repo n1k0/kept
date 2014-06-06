@@ -1,5 +1,7 @@
 /** @jsx React.DOM */
 
+"use strict";
+
 var React = require("react");
 var GlyphiconLink = require("./GlyphiconLink");
 var KeptText = require("./KeptText");

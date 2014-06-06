@@ -33,6 +33,10 @@ The resulting files are then available in the `build` folder.
 
 A [working demo](http://n1k0.github.io/kept/) is also available.
 
+Code linting:
+
+    $ npm run lint
+
 License
 -------
 

@@ -1,5 +1,7 @@
 /** @jsx React.DOM */
 
+"use strict";
+
 var utils = require("../utils");
 var React = require("react");
 var KeptStore = require("../store");
@@ -38,17 +40,21 @@ var KeptApp = React.createClass({
   _forms: {
     // XXX: use standard component constructor?
     text: function(data) {
-      return <KeptTextForm resetForm={this.resetForm}
-                           create={this.create}
-                           update={this.update}
-                           data={data} />;
+      return (
+        <KeptTextForm resetForm={this.resetForm}
+                      create={this.create}
+                      update={this.update}
+                      data={data} />
+      );
     },
 
     todo: function(data) {
-      return <KeptTodoForm resetForm={this.resetForm}
-                           create={this.create}
-                           update={this.update}
-                           data={data} />;
+      return (
+        <KeptTodoForm resetForm={this.resetForm}
+                      create={this.create}
+                      update={this.update}
+                      data={data} />
+      );
     }
   },
 
