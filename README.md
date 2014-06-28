@@ -1,7 +1,7 @@
 Kept
 ====
 
-![https://travis-ci.org/n1k0/kept](https://travis-ci.org/n1k0/kept.svg)
+![https://travis-ci.org/n1k0/kept](https://travis-ci.org/n1k0/kept.svg) ![https://david-dm.org/n1k0/kept](https://david-dm.org/n1k0/kept.png)
 
 Personal rich notes HTML app inspired by [Google Keep](https://keep.google.com/)
 and powered by [React](http://facebook.github.io/react/).
