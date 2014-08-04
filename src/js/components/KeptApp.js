@@ -15,9 +15,12 @@ var KeptApp = React.createClass({
   mixins: [UndoStack],
 
   getInitialState: function() {
-    return {
-      items: this.props.store.load()
-    };
+    return this.props.store.load()
+      .then(function(items) {
+        return {
+          items: items
+        };
+      });
   },
 
   /**
@@ -56,13 +59,15 @@ var KeptApp = React.createClass({
   },
 
   save: function(items) {
-    this.props.store.save(items);
-    this.snapshot();
-    this.setState({items: items});
+    return this.props.store.save(items)
+      .then(function() {
+        this.snapshot();
+        this.setState({items: items});
+      });
   },
 
   loadSamples: function() {
-    this.save(initial);
+    return this.save(initial);
   },
 
   formCreator: function(type) {
@@ -81,8 +86,10 @@ var KeptApp = React.createClass({
 
   create: function(itemData) {
     itemData.id = utils.nextId(this.state.items);
-    this.save(this.state.items.concat([itemData]));
-    this.resetForm();
+    return this.save(this.state.items.concat([itemData]))
+      .then(function() {
+        this.resetForm();
+      });
   },
 
   edit: function(itemData) {
@@ -90,16 +97,17 @@ var KeptApp = React.createClass({
   },
 
   update: function(updatedItem) {
-    this.save(this.state.items.map(function(item) {
+    return this.save(this.state.items.map(function(item) {
       if (item.id === updatedItem.id)
         return updatedItem;
       return item;
-    }));
-    this.resetForm();
+    })).then(function() {
+      this.resetForm();
+    });
   },
 
   remove: function(itemData) {
-    this.save(this.state.items.filter(function(data) {
+    return this.save(this.state.items.filter(function(data) {
       return itemData !== data;
     }));
   },
@@ -107,7 +115,7 @@ var KeptApp = React.createClass({
   move: function(fromIndex, toIndex) {
     var items = this.state.items.slice(0);
     items.splice(toIndex, 0, items.splice(fromIndex, 1)[0]);
-    this.save(items);
+    return this.save(items);
   },
 
   render: function() {

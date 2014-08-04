@@ -1,0 +1,8 @@
+{
+  "title": "Today",
+  "tasks": [
+    {"label": "Walk the dog", "done": true},
+    {"label": "Clean the car", "done": false},
+    {"label": "Buy a new carpet", "done": false}
+  ]
+}

@@ -1,0 +1,33 @@
+{"definition": {
+    "title": "Keep — Todo",
+    "description": "Store user text kept card.",
+    "fields": [
+      {
+        "name": "title",
+        "type": "string",
+        "label": "Title",
+        "required": true
+      },
+      {
+        "name": "tasks",
+        "type": "list",
+        "label": "Tasks",
+        "description": "List of todo list's tasks.",
+        "fields": [
+          {
+            "name": "label",
+            "type": "string",
+            "label": "Label",
+            "required": true
+          },
+          {
+            "name": "done",
+            "type": "boolean",
+            "label": "Check when done!",
+            "required": true
+          }
+        ]
+      }
+    ]
+  }
+}
