@@ -15,12 +15,20 @@ var KeptApp = React.createClass({
   mixins: [UndoStack],
 
   getInitialState: function() {
-    return this.props.store.load()
+    return {
+      items: []
+    };
+  },
+
+  componentDidMount: function() {
+    this.props.store.load()
       .then(function(items) {
-        return {
-          items: items
-        };
-      });
+        if (this.isMounted()) {
+          this.setState({
+            items: items
+          });
+        }
+      }.bind(this));
   },
 
   /**
@@ -63,7 +71,7 @@ var KeptApp = React.createClass({
       .then(function() {
         this.snapshot();
         this.setState({items: items});
-      });
+      }.bind(this));
   },
 
   loadSamples: function() {

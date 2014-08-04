@@ -19,7 +19,7 @@ KeptStore.prototype = {
         console.error("failed parsing kept data:", data, e);
         resolve([]);
       }
-    });
+    }.bind(this));
   },
 
   save: function(data) {
@@ -30,7 +30,7 @@ KeptStore.prototype = {
         console.error("failed saving keep data", e);
       }
       resolve();
-    });
+    }.bind(this));
   }
 };
 
