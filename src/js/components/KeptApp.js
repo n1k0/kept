@@ -23,11 +23,9 @@ var KeptApp = React.createClass({
   componentDidMount: function() {
     this.props.store.load()
       .then(function(items) {
-        if (this.isMounted()) {
-          this.setState({
-            items: items
-          });
-        }
+        this.setState({
+          items: items
+        });
       }.bind(this));
   },
 
@@ -95,9 +93,7 @@ var KeptApp = React.createClass({
   create: function(itemData) {
     itemData.id = utils.nextId(this.state.items);
     return this.save(this.state.items.concat([itemData]))
-      .then(function() {
-        this.resetForm();
-      });
+      .then(this.resetForm.bind(this));
   },
 
   edit: function(itemData) {

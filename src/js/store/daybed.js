@@ -51,11 +51,10 @@ DaybedStore.prototype = {
     return Promise.all(this._types.map(function(type) {
       return this._store.getRecords(PREFIX + type)
         .then(function(doc) {
-          for (var i = 0; i < doc.records.length; i++) {
-            var record = doc.records[i];
+          data = data.concat(doc.records.map(function(record) {
             record.type = type;
-            data.push(record);
-          }
+            return record;
+          }));
         })
         .catch(console.error);
     }.bind(this))).then(function() {
