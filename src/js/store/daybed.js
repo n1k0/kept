@@ -1,6 +1,7 @@
 "use strict";
 var PREFIX = "keep_";  // Schema table prefix
 var schema = require("../data/daybed_schema");
+var objectEquals = require("../utils").objectEquals;
 
 
 function DaybedStore(options) {
@@ -57,24 +58,69 @@ DaybedStore.prototype = {
           }));
         })
         .catch(console.error);
-    }.bind(this))).then(function() {
-      return data;
-    });
+    }.bind(this)))
+      .then(function() {
+        return data;
+      });
   },
 
   save: function(data) {
-    return Promise.all(data.map(function(doc) {
-      try {
-        doc = JSON.parse(JSON.stringify(doc));
-      } catch (e) {
-        console.error(doc, "failed saving keep data", e);
-        return;
-      }
-      var daybedModelName = PREFIX + doc.type;
-      delete doc.type;
-      return this._store.addRecord(daybedModelName, doc)
-        .catch(console.error);
-    }.bind(this)));
+    console.log(data);
+    var self = this;
+    var currentDataObj = {},
+        previousDataObj = {},
+        currentDataIds, previousDataIds,
+        droppedObjIds, changedObjIds;
+
+    return self.load()
+      .then(function(items) {
+        console.log(items);
+        // Get current data ids
+        currentDataIds = data.map(function(doc) {
+          currentDataObj[doc.id] = doc;
+          return doc.id;
+        });
+
+        previousDataIds = items.map(function(doc) {
+          previousDataObj[doc.id] = doc;
+          return doc.id
+        });
+
+        // Get deleted objects
+        droppedObjIds = previousDataIds.filter(function(docId) {
+          return currentDataIds.indexOf(docId) < 0;
+        });
+
+        // Get changed objects
+        changedObjIds = currentDataIds.filter(function(docId) {
+          console.log(docId, currentDataObj[docId], previousDataObj[docId],
+                      objectEquals(currentDataObj[docId], previousDataObj[docId]));
+          return objectEquals(currentDataObj[docId], previousDataObj[docId]) !== true;
+        });
+
+        // Make the change to the backend
+        return Promise.all(changedObjIds.map(function(docId) {
+          var doc = currentDataObj[docId];
+          var daybedModelName;
+          try {
+            doc = JSON.parse(JSON.stringify(doc));
+            daybedModelName = PREFIX + doc.type;
+            delete doc.type;
+          } catch (e) {
+            console.error(doc, "failed saving keep data", e);
+            return;
+          }
+          return self._store.addRecord(daybedModelName, doc)
+            .catch(console.error);
+        })).then(function() {
+          return Promise.all(droppedObjIds.map(function(docId) {
+            var doc = previousDataObj[docId];
+            var daybedModelName = PREFIX + doc.type;
+            return self._store.deleteRecord(daybedModelName, docId)
+              .catch(console.error);
+          }));
+        });
+      });
   }
 };
 

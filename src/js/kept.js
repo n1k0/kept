@@ -9,9 +9,10 @@ var DaybedStore = require("./store/daybed");
 // var store = new KeptStore();
 var store = new DaybedStore({
   "host": "http://localhost:8000",
-  "tokenId": "36e568b4816127c255ecc0263cb03b6b57ff504ae344702d869ee5561eba9750",
-  "tokenKey": "b81c8fea3f356039d12abd9704d449f1d4dfb78c4262301cadc5e626d5a8b3e0"
+  "tokenId": "8ac94860337bcd6497bc6dd7c17836f2ce027fb442666ee8bace96c8c58e3594",
+  "tokenKey": "1d24f64c424cdefe4797a13c1d43b73d20988c803a1dcf80a684e6cd336db31e"
 });
-
-React.renderComponent(<KeptApp store={store} />,
-                      document.getElementById('kept'));
+store.setUp().then(function() {
+  React.renderComponent(<KeptApp store={store} />,
+                        document.getElementById('kept'));
+});

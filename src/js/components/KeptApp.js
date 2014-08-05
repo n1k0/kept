@@ -91,7 +91,7 @@ var KeptApp = React.createClass({
   },
 
   create: function(itemData) {
-    itemData.id = utils.nextId(this.state.items);
+    itemData.id = utils.nextId();
     return this.save(this.state.items.concat([itemData]))
       .then(this.resetForm.bind(this));
   },
@@ -107,7 +107,7 @@ var KeptApp = React.createClass({
       return item;
     })).then(function() {
       this.resetForm();
-    });
+    }.bind(this));
   },
 
   remove: function(itemData) {
