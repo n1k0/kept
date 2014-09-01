@@ -2,41 +2,40 @@
 var PREFIX = "keep_";  // Schema table prefix
 var schema = require("../data/daybed_schema");
 var objectEquals = require("../utils").objectEquals;
+var Daybed = require("daybed.js");
 
+console.log("Daybed", Daybed);
 
 function DaybedStore(options) {
   if (!options.hasOwnProperty("host")) {
     throw new Error("Please define your Daybed storage host urls.");
   }
-  if (!options.hasOwnProperty("tokenId") ||
-      !options.hasOwnProperty("tokenKey")) {
-    throw new Error("Please define your Daybed credentials " +
-                    "(tokenId, tokenKey).");
-  }
   this._types = Object.keys(schema);
-  
-  this._store = new Daybed.Session(options.host, {
-    id: options.tokenId,
-    key: options.tokenKey,
-    algorithm: "sha256"
-  });
+  this._options = options;
 }
 
 
 DaybedStore.prototype = {
   setUp: function() {
-    return this._store.getModels()
+    var self = this;
+    return Daybed.startSession(self._options.host, {
+      token: this._options.token
+    }).then(function(session) {
+      self._session = session;
+      self._prefix = PREFIX + session.token.slice(0, 5);
+      self._options.onSession(session);
+      self._session.getModels()
       .then(function(models) {
         // Make sure all needed models are defined.
         var modelIds = [];
         models.forEach(function(doc) {
           modelIds.push(doc.id);
         });
-        return Promise.all(this._types.map(function(type) {
-          var daybedModelName = PREFIX + type;
+        return Promise.all(self._types.map(function(type) {
+          var daybedModelName = self._prefix + type;
           if (modelIds.indexOf(daybedModelName) === -1) {
             // If not create the model
-            return this._store.addModel(daybedModelName, schema[type])
+            return self._session.addModel(daybedModelName, schema[type])
               .catch(function(err) {
                 console.error("Add model", daybedModelName, ":", err);
                 throw new Error("Add model " + daybedModelName + ": " + err);
@@ -46,11 +45,13 @@ DaybedStore.prototype = {
           }
         }.bind(this)));
       }.bind(this));
+    });
   },
   load: function() {
+    var self = this;
     var data = [];
     return Promise.all(this._types.map(function(type) {
-      return this._store.getRecords(PREFIX + type)
+      return this._session.getRecords(self._prefix + type)
         .then(function(doc) {
           data = data.concat(doc.records.map(function(record) {
             record.type = type;
@@ -83,7 +84,7 @@ DaybedStore.prototype = {
 
         previousDataIds = items.map(function(doc) {
           previousDataObj[doc.id] = doc;
-          return doc.id
+          return doc.id;
         });
 
         // Get deleted objects
@@ -104,19 +105,19 @@ DaybedStore.prototype = {
           var daybedModelName;
           try {
             doc = JSON.parse(JSON.stringify(doc));
-            daybedModelName = PREFIX + doc.type;
+            daybedModelName = self._prefix + doc.type;
             delete doc.type;
           } catch (e) {
             console.error(doc, "failed saving keep data", e);
             return;
           }
-          return self._store.addRecord(daybedModelName, doc)
+          return self._session.addRecord(daybedModelName, doc)
             .catch(console.error);
         })).then(function() {
           return Promise.all(droppedObjIds.map(function(docId) {
             var doc = previousDataObj[docId];
-            var daybedModelName = PREFIX + doc.type;
-            return self._store.deleteRecord(daybedModelName, docId)
+            var daybedModelName = self._prefix + doc.type;
+            return self._session.deleteRecord(daybedModelName, docId)
               .catch(console.error);
           }));
         });
