@@ -35,7 +35,8 @@
     "react-bootstrap": "^0.10.*",
     "reactify": "^0.13.*",
     "browserify": "^4.1.*",
-    "vinyl-source-stream": "^0.1.*"
+    "vinyl-source-stream": "^0.1.*",
+    "daybed.js": "0.1.3-dev"
   },
   "devDependencies": {
     "jest-cli": "latest",

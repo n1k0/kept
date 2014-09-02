@@ -90,6 +90,7 @@ gulp.task("js:vendors", function() {
     .require("react")
     .require("react-bootstrap")
     .require("marked")
+    .require("daybed.js")
     .bundle()
     .pipe(source(opt.vendors))
     .pipe(gulp.dest(opt.outputFolder + "/js"));
