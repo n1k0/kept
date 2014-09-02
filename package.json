@@ -36,7 +36,7 @@
     "reactify": "^0.13.*",
     "browserify": "^4.1.*",
     "vinyl-source-stream": "^0.1.*",
-    "daybed.js": "0.1.2-dev"
+    "daybed.js": "0.1.3-dev"
   },
   "devDependencies": {
     "jest-cli": "latest",

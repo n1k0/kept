@@ -19,39 +19,38 @@ DaybedStore.prototype = {
   setUp: function() {
     var self = this;
     return Daybed.startSession(self._options.host, {
-      token: this._options.token
+      token: self._options.token
     }).then(function(session) {
       self._session = session;
       self._prefix = PREFIX + session.token.slice(0, 5);
       self._options.onSession(session);
-      self._session.getModels()
-      .then(function(models) {
-        // Make sure all needed models are defined.
-        var modelIds = [];
-        models.forEach(function(doc) {
-          modelIds.push(doc.id);
-        });
-        return Promise.all(self._types.map(function(type) {
-          var daybedModelName = self._prefix + type;
-          if (modelIds.indexOf(daybedModelName) === -1) {
-            // If not create the model
-            return self._session.addModel(daybedModelName, schema[type])
-              .catch(function(err) {
-                console.error("Add model", daybedModelName, ":", err);
-                throw new Error("Add model " + daybedModelName + ": " + err);
-              });
-          } else {
-            console.log("Model", daybedModelName, "already exists.");
-          }
-        }.bind(this)));
-      }.bind(this));
+      return self._session.getModels();
+    }).then(function(models) {
+      // Make sure all needed models are defined.
+      var modelIds = [];
+      models.forEach(function(doc) {
+        modelIds.push(doc.id);
+      });
+      return Promise.all(self._types.map(function(type) {
+        var daybedModelName = self._prefix + type;
+        if (modelIds.indexOf(daybedModelName) === -1) {
+          // If not create the model
+          return self._session.addModel(daybedModelName, schema[type])
+            .catch(function(err) {
+              console.error("Add model", daybedModelName, ":", err);
+              throw new Error("Add model " + daybedModelName + ": " + err);
+            });
+        } else {
+          console.log("Model", daybedModelName, "already exists.");
+        }
+      }));
     });
   },
   load: function() {
     var self = this;
     var data = [];
-    return Promise.all(this._types.map(function(type) {
-      return this._session.getRecords(self._prefix + type)
+    return Promise.all(self._types.map(function(type) {
+      return self._session.getRecords(self._prefix + type)
         .then(function(doc) {
           data = data.concat(doc.records.map(function(record) {
             record.type = type;
@@ -59,7 +58,7 @@ DaybedStore.prototype = {
           }));
         })
         .catch(console.error);
-    }.bind(this)))
+    }))
       .then(function() {
         return data;
       });
