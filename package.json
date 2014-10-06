@@ -27,15 +27,16 @@
   "homepage": "https://github.com/n1k0/kept",
   "dependencies": {
     "gulp": "^3.8.*",
-    "gulp-connect": "^2.0.*",
     "gulp-gh-pages": "^0.3.*",
     "gulp-uglify": "^0.3.*",
     "marked": "^0.3.*",
     "react": "^0.10.*",
     "react-bootstrap": "^0.10.*",
     "reactify": "^0.13.*",
-    "browserify": "^4.1.*",
-    "vinyl-source-stream": "^0.1.*"
+    "vinyl-source-stream": "^0.1.*",
+    "watchify": "^1.0.6",
+    "browserify": "^6.0.2",
+    "gulp-webserver": "^0.8.3"
   },
   "devDependencies": {
     "jest-cli": "latest",
