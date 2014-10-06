@@ -4,17 +4,20 @@
 
 var gulp = require("gulp");
 var browserify = require('browserify');
+var watchify = require('watchify');
 var source = require('vinyl-source-stream');
 var uglify = require('gulp-uglify');
-var connect = require("gulp-connect");
+var webserver = require("gulp-webserver");
 var deploy = require("gulp-gh-pages");
 
 var opt = {
   outputFolder: "build",
 
   server: {
+    host: "localhost",
     port: 4000,
-    livereload: 31357
+    livereload: true,
+    open:true
   },
 
   cssAssets: [
@@ -100,29 +103,50 @@ gulp.task("js:vendors", function() {
  * Server task
  */
 gulp.task("server", function() {
-  return connect.server({
-    root: opt.outputFolder,
-    port: opt.server.port,
-    livereload: {
-      port: opt.livereload
-    }
-  });
+   return gulp.src(opt.outputFolder)
+    .pipe(webserver(opt.server));
 });
+
+/**
+ * Watchify
+ */
+
+gulp.task("watchify", function(){
+
+  var b = browserify( "./" + opt.app.src , watchify.args)
+    .transform("reactify")
+    .external("react")
+    .external("react-bootstrap")
+    .external("marked");
+
+
+  function updateBundle(w){
+
+    return w.bundle()
+      .pipe(source(opt.app.dest))
+      .pipe(gulp.dest(opt.outputFolder + "/js"));
+  }
+
+  var watcher= watchify(b);
+  watcher.on("update", function(){
+    updateBundle(watcher);
+  });
+
+  return updateBundle(watcher);
+
+});
+
+
+
 
 /**
  * Watch task
  * Launch a server with livereload
  */
-gulp.task("watch", ["assets", "js"], function() {
+gulp.task("watch", ["assets","js:vendors", "watchify"], function() {
   gulp.watch(opt.cssAssets,  ["assets:css"]);
   gulp.watch(opt.fontAssets, ["assets:fonts"]);
-  gulp.watch(opt.jsAssets,   ["js:app"]);
   gulp.watch(opt.htmlAssets, ["assets:html"]);
-
-  gulp.watch([opt.outputFolder + "/**/*.*"])
-    .on("change", function() {
-      gulp.src("").pipe(connect.reload());
-    });
 });
 
 gulp.task("dist", ["assets", "js"], function() {
@@ -136,7 +160,7 @@ gulp.task("dist", ["assets", "js"], function() {
  */
 gulp.task("deploy", ["dist"], function() {
   gulp.src("./build/**/*")
-      .pipe(deploy("git@github.com:n1k0/kept.git"));
+    .pipe(deploy("git@github.com:n1k0/kept.git"));
 });
 
 gulp.task("default", ["server", "watch"]);
