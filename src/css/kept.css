@@ -16,43 +16,27 @@ body {
 }
 
 .kept-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-content: stretch;
+  align-items:stretch;
+  width: 100%;
   height: 100%;
 }
-  @media (max-width: 768px) {
-    .kept-list {
-      -webkit-columns: 1;
-      -moz-columns: 1;
-      columns: 1;
-    }
-  }
-  @media (min-width: 768px) {
-    .kept-list {
-      -webkit-columns: 2;
-      -moz-columns: 2;
-      columns: 2;
-    }
-  }
-  @media (min-width: 992px) {
-    .kept-list {
-      -webkit-columns: 3;
-      -moz-columns: 3;
-      columns: 3;
-    }
-  }
-  @media (min-width: 1200px) {
-    .kept-list {
-      -webkit-columns: 4;
-      -moz-columns: 4;
-      columns: 4;
-    }
-  }
-  @media (min-width: 1400px) {
-    .kept-list {
-      -webkit-columns: 5;
-      -moz-columns: 5;
-      columns: 5;
-    }
-  }
+
+.kept-columns {
+  align-self: auto;
+  flex: 1 0 0;
+  margin: 0 1em;
+}
+.kept-columns:first-child {
+  margin-left: 0;
+}
+.kept-columns:last-child {
+  margin-right: 0;
+}
 
 .kept-panel {
   /* FF hack to emulate "break-inside: avoid;" behavior */

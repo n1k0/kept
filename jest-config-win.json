@@ -1,0 +1,7 @@
+{
+  "collectCoverage": true,
+  "scriptPreprocessor": "preprocessor.js",
+  "unmockedModulePathPatterns": [
+    "react"
+  ]
+}

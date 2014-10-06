@@ -60,7 +60,8 @@ var KeptEntry = React.createClass({
   handleOnDrop: function(event) {
     event.preventDefault();
     this.unhighlight();
-    this.props.move(event.dataTransfer.getData("text/plain"), this.props.key);
+    var newIndex = parseInt(event.dataTransfer.getData("text/plain"), 10);
+    this.props.move(newIndex, this.props.key);
   },
 
   highlight: function() {

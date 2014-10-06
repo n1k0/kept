@@ -8,7 +8,8 @@
     "dist": "gulp dist",
     "lint": "jsxhint -c .jshintrc src/js",
     "start": "gulp",
-    "test": "jest --config jest-config.json && npm run lint"
+    "test": " npm run lint && jest --config jest-config.json",
+    "test-win": "npm run lint && jest --config jest-config-win.json"
   },
   "repository": {
     "type": "git",
