@@ -2,11 +2,32 @@
 
 "use strict";
 
+var utils = require("../utils");
 var React = require("react");
-var KeptEntry = require("./KeptEntry");
+var KeptColumns = require("./KeptColumns");
 var DefaultContent = require("./DefaultContent");
+var Resize = require("../mixins/Resize");
 
 var KeepItems = React.createClass({
+  mixins:[Resize],
+
+  getInitialState: function() {
+    return {
+      columns: 1,
+      columnsWidth: 300
+    };
+  },
+
+  onResize: function(event){
+    console.log(event, event.target.innerWidth);
+    var col = 1;
+    if (this.state.columnsWidth > 0) {
+      col = Math.floor(event.target.innerWidth / this.state.columnsWidth);
+    }
+
+    this.setState({columns: col});
+  },
+
   render: function() {
     if (!this.props.items.length) {
       return (
@@ -14,16 +35,29 @@ var KeepItems = React.createClass({
                         loadSamples={this.props.loadSamples} />
       );
     }
+
     return (
-      <div className="kept-list">{
-        this.props.items.map(function(itemData, key) {
-          return <KeptEntry key={key} itemData={itemData}
-                    edit={this.props.edit}
-                    remove={this.props.remove}
-                    update={this.props.update}
-                    move={this.props.move} />;
-        }.bind(this))
-      }</div>
+      <div className="kept-list">
+      {
+        utils
+          .range(this.state.columns)
+          .map(function(_, index) {
+            var colItems = this.props.items.filter(function(item, i) {
+              return i%this.state.columns === index;
+            }, this);
+
+            return (
+              <KeptColumns items={colItems}
+                           column={index}
+                           columns={this.state.columns}
+                           edit={this.props.edit}
+                           remove={this.props.remove}
+                           update={this.props.update}
+                           move={this.props.move} />
+            );
+          }, this)
+      }
+      </div>
     );
   }
 });

@@ -105,8 +105,9 @@ var KeptApp = React.createClass({
   },
 
   move: function(fromIndex, toIndex) {
-    var items = this.state.items.slice(0);
-    items.splice(toIndex, 0, items.splice(fromIndex, 1)[0]);
+    // permut don't mutate array, return a new array
+    var items = utils.permut(this.state.items, fromIndex, toIndex);
+
     this.save(items);
   },
 
