@@ -4,17 +4,17 @@ jest.dontMock('..');
 var utils = require('..');
 
 describe("nextId", function() {
-  var items;
 
-  beforeEach(function() {
-    items = [{id: 1}];
+  it("should create an uuid", function() {
+    expect(utils.nextId().length).toEqual(36);
   });
+});
 
-  it("should create a next id if items list is empty", function() {
-    expect(utils.nextId([])).toEqual(1);
-  });
 
-  it("should find the next available id", function() {
-    expect(utils.nextId(items)).toEqual(2);
+describe("objectEquals", function() {
+  it("should test objects equality", function() {
+    expect(utils.objectEquals(
+      {b: "Toto", a: "Titi"}, {a: "Titi", b: "Toto"}
+    )).toEqual(true);
   });
 });
