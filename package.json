@@ -6,7 +6,7 @@
   "scripts": {
     "deploy": "gulp deploy",
     "dist": "gulp dist",
-    "lint": "jsxhint -c .jshintrc src/js",
+    "lint": "jsxhint -c .jshintrc src/js --reporter node_modules/jshint-stylish/stylish.js",
     "start": "gulp",
     "test": " npm run lint && jest --config jest-config.json",
     "test-win": "npm run lint && jest --config jest-config-win.json"
@@ -42,6 +42,7 @@
   "devDependencies": {
     "jest-cli": "latest",
     "jsxhint": "latest",
+    "jshint-stylish": "^1.0.0",
     "react-tools": "latest"
   }
 }
