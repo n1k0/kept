@@ -7,7 +7,6 @@ var browserify = require('browserify');
 var watchify = require('watchify');
 var source = require('vinyl-source-stream');
 var uglify = require('gulp-uglify');
-var webserver = require("gulp-webserver");
 var deploy = require("gulp-gh-pages");
 
 var opt = {
@@ -16,7 +15,7 @@ var opt = {
   server: {
     host: "localhost",
     port: 4000,
-    livereload: true,
+    livereload: 35729,
     open:true
   },
 
@@ -102,9 +101,25 @@ gulp.task("js:vendors", function() {
 /**
  * Server task
  */
+// gulp.task("server", function() {
+//    return gulp.src(opt.outputFolder)
+//     .pipe(webserver(opt.server));
+// });
+//
+var connect = require('connect');
+var livereload = require('connect-livereload');
+var staticFile = require('serve-static');
+var lrServer = require('tiny-lr')();
+
 gulp.task("server", function() {
-   return gulp.src(opt.outputFolder)
-    .pipe(webserver(opt.server));
+
+  lrServer
+    .listen(opt.server.livereload);
+
+  connect()
+    .use(livereload({ port: opt.server.livereload }))
+    .use(staticFile(opt.outputFolder))
+    .listen(4000);
 });
 
 /**
@@ -147,6 +162,9 @@ gulp.task("watch", ["assets","js:vendors", "watchify"], function() {
   gulp.watch(opt.cssAssets,  ["assets:css"]);
   gulp.watch(opt.fontAssets, ["assets:fonts"]);
   gulp.watch(opt.htmlAssets, ["assets:html"]);
+  gulp.watch(opt.outputFolder+"/**/*", function(file){
+    lrServer.changed({body : {files : [file.path]}});
+  });
 });
 
 gulp.task("dist", ["assets", "js"], function() {
@@ -163,4 +181,6 @@ gulp.task("deploy", ["dist"], function() {
     .pipe(deploy("git@github.com:n1k0/kept.git"));
 });
 
-gulp.task("default", ["server", "watch"]);
+gulp.task("default", ["server", "watch"], function(){
+  require('opn')("http://"+opt.server.host+":"+opt.server.port);
+});
