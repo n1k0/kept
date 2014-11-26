@@ -37,7 +37,11 @@
     "vinyl-source-stream": "^0.1.*",
     "watchify": "^1.0.6",
     "browserify": "^6.0.2",
-    "gulp-webserver": "^0.8.3"
+    "connect": "^3.3.3",
+    "connect-livereload": "^0.5.2",
+    "serve-static": "^1.7.1",
+    "tiny-lr": "^0.1.4",
+    "opn": "^1.0.0"
   },
   "devDependencies": {
     "jest-cli": "latest",
