@@ -48,6 +48,7 @@ var KeepItems = React.createClass({
 
             return (
               <KeptColumns items={colItems}
+                           key={index}
                            column={index}
                            columns={this.state.columns}
                            edit={this.props.edit}

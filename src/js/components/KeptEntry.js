@@ -40,7 +40,7 @@ var KeptEntry = React.createClass({
 
   handleDragStart: function(event) {
     event.dataTransfer.effectAllowed = "move";
-    event.dataTransfer.setData('text/plain', this.props.key);
+    event.dataTransfer.setData('text/plain', this.props.itemIndex);
   },
 
   handleDragEnter: function(event) {
@@ -61,7 +61,7 @@ var KeptEntry = React.createClass({
     event.preventDefault();
     this.unhighlight();
     var newIndex = parseInt(event.dataTransfer.getData("text/plain"), 10);
-    this.props.move(newIndex, this.props.key);
+    this.props.move(newIndex, this.props.itemIndex);
   },
 
   highlight: function() {

@@ -15,6 +15,7 @@ var KeptColumns = React.createClass({
           var key = index * this.props.columns + this.props.column;
 
           return <KeptEntry key={key}
+                            itemIndex={key}
                             itemData={itemData}
                             edit={this.props.edit}
                             remove={this.props.remove}
