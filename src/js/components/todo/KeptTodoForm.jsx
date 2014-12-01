@@ -1,8 +1,7 @@
-/** @jsx React.DOM */
-
 "use strict";
 
 var React = require("react");
+var reactDom = require("react-dom");
 var Modal = require("react-bootstrap").Modal;
 var KeptTodoTaskForm = require("./KeptTodoTaskForm");
 
@@ -27,7 +26,7 @@ var KeptTodoForm = React.createClass({
   },
 
   focusLatestInput: function() {
-    var inputs = this.getDOMNode().querySelectorAll("input[type=text]");
+    var inputs = this.refs.tasks.querySelectorAll("input[type=text]");
     inputs[inputs.length - 1].focus();
   },
 
@@ -35,14 +34,15 @@ var KeptTodoForm = React.createClass({
     this.props.resetForm();
   },
 
-  handleSubmit: function() {
-    var id = parseInt(this.refs.id.getDOMNode().value.trim(), 10);
+  handleSave: function() {
+    var id = parseInt(this.refs.id.value.trim(), 10);
     var process = id ? this.props.update : this.props.create;
     process({
       type: "todo",
       id: id,
-      title: this.refs.title.getDOMNode().value.trim(),
+      title: this.refs.title.value.trim(),
       tasks: (this.state.tasks || []).filter(function(task) {
+        console.log(task.label)
         return !!task.label;
       })
     });
@@ -69,9 +69,8 @@ var KeptTodoForm = React.createClass({
   },
 
   render: function() {
-    console.log("---");
     return (
-      <Modal title="Create new Todo" onRequestHide={this.props.resetForm} animation={false}>
+      <Modal title="Create new Todo" show={true} onHide={this.props.resetForm} animation={false}>
         <form className="todo-form" role="form" onSubmit={this.addTask}>
           <div className="modal-body">
             <input type="hidden" ref="id" defaultValue={this.props.data.id} />
@@ -79,9 +78,9 @@ var KeptTodoForm = React.createClass({
               <input ref="title" type="text" className="form-control" placeholder="Title"
                      defaultValue={this.props.data.title} />
             </div>
-            <ul className="list-group">{
+            <ul className="list-group" ref="tasks">{
               this.state.tasks.map(function(task, key) {
-                return <KeptTodoTaskForm key={key} data={task} updateTask={this.updateTask}
+                return <KeptTodoTaskForm key={key} index={key} data={task} updateTask={this.updateTask}
                                          removeTask={this.removeTask} />;
               }, this)
             }</ul>
@@ -89,7 +88,7 @@ var KeptTodoForm = React.createClass({
           <div className="modal-footer form-group">
             <button className="btn btn-default" type="submit">Add task</button>
             &nbsp;
-            <button className="btn btn-primary" type="button" onClick={this.handleSubmit}>Save</button>
+            <button className="btn btn-primary" type="button" onClick={this.handleSave}>Save</button>
             &nbsp;
             <a href="#" onClick={this.handleCancel}>Cancel</a>
           </div>

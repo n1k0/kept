@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 "use strict";
 
 var utils = require("../utils");
@@ -107,7 +105,6 @@ var KeptApp = React.createClass({
   move: function(fromIndex, toIndex) {
     // permut don't mutate array, return a new array
     var items = utils.permut(this.state.items, fromIndex, toIndex);
-
     this.save(items);
   },
 

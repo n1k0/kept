@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 "use strict";
 
 var React = require("react");
@@ -26,13 +24,13 @@ var KeptTextForm = React.createClass({
   },
 
   handleSubmit: function() {
-    var rawId = this.refs.id.getDOMNode().value;
+    var rawId = this.refs.id.value;
     var process = rawId ? this.props.update : this.props.create;
     process({
       type: "text",
       id: rawId ? parseInt(rawId, 10) : null,
-      title: this.refs.title.getDOMNode().value.trim(),
-      text: this.refs.text.getDOMNode().value.trim()
+      title: this.refs.title.value.trim(),
+      text: this.refs.text.value.trim()
     });
   },
 
@@ -44,7 +42,7 @@ var KeptTextForm = React.createClass({
 
   render: function() {
     return (
-      <Modal title="Create new Text" onRequestHide={this.props.resetForm} animation={false}>
+      <Modal title="Create new Text" show={true}  onHide={this.props.resetForm} animation={false}>
         <form role="form" onSubmit={this.handleSubmit}>
           <div className="modal-body">
             <input type="hidden" ref="id" defaultValue={this.props.data.id || ""} />

@@ -57,10 +57,12 @@ body {
     .kept-modal .kept-panel .panel-heading {
       cursor: default;
     }
-    .kept-panel h3 a {
-      display: block;
+    .kept-panel h3 button {
+      display: inline-block;
       float: right;
       margin-left: .5em;
+      padding: 0;
+      color: #fff;
     }
 
 .targetted {

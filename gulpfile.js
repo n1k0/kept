@@ -9,6 +9,8 @@ var source = require('vinyl-source-stream');
 var uglify = require('gulp-uglify');
 var deploy = require("gulp-gh-pages");
 
+var extend = require('util')._extend;
+
 var opt = {
   outputFolder: "build",
 
@@ -37,10 +39,14 @@ var opt = {
   ],
 
   app: {
-    src: "src/js/kept.js",
+    src: "src/js/kept.jsx",
     dest: "kept.js"
   },
   vendors: "vendors.js"
+};
+
+var jsxOpt = {
+  extensions: ['.jsx']
 };
 
 /**
@@ -77,9 +83,11 @@ gulp.task("js", [
   ]);
 
 gulp.task("js:app", ["js:vendors"], function() {
-  return browserify("./" + opt.app.src)
-    .transform("reactify")
+  return browserify(jsxOpt)
+    .add("./"+opt.app.src)
+    .transform("reactify", {global: true})
     .external("react")
+    .external("react-dom")
     .external("react-bootstrap")
     .external("marked")
     .bundle()
@@ -90,6 +98,7 @@ gulp.task("js:app", ["js:vendors"], function() {
 gulp.task("js:vendors", function() {
   return browserify()
     .require("react")
+    .require("react-dom")
     .require("react-bootstrap")
     .require("marked")
     .bundle()
@@ -127,28 +136,23 @@ gulp.task("server", function() {
  */
 
 gulp.task("watchify", function(){
+  var args = extend(watchify.args,  jsxOpt);
 
-  var b = browserify( "./" + opt.app.src , watchify.args)
-    .transform("reactify")
+  var b = browserify("./"+opt.app.src, args)
+    .transform("reactify", {global: true})
     .external("react")
+    .external("react-dom")
     .external("react-bootstrap")
     .external("marked");
 
-
-  function updateBundle(w){
-
-    return w.bundle()
+  return watchify(b).on("update", function(){
+    b.bundle()
       .pipe(source(opt.app.dest))
       .pipe(gulp.dest(opt.outputFolder + "/js"));
-  }
-
-  var watcher= watchify(b);
-  watcher.on("update", function(){
-    updateBundle(watcher);
-  });
-
-  return updateBundle(watcher);
-
+  })
+    .bundle()
+    .pipe(source(opt.app.dest))
+    .pipe(gulp.dest(opt.outputFolder + "/js"));
 });
 
 
@@ -181,6 +185,8 @@ gulp.task("deploy", ["dist"], function() {
     .pipe(deploy("git@github.com:n1k0/kept.git"));
 });
 
-gulp.task("default", ["server", "watch"], function(){
+gulp.task("default", ["server", "watch"], function(done){
+  console.log("app running at http://"+opt.server.host+":"+opt.server.port);
   require('opn')("http://"+opt.server.host+":"+opt.server.port);
+  done();
 });
