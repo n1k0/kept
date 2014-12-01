@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 "use strict";
 
 var TestUtils = require('react/addons').addons.TestUtils;
