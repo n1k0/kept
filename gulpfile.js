@@ -7,7 +7,6 @@ var browserify = require('browserify');
 var watchify = require('watchify');
 var source = require('vinyl-source-stream');
 var uglify = require('gulp-uglify');
-var webserver = require("gulp-webserver");
 var deploy = require("gulp-gh-pages");
 
 var opt = {
