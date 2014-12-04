@@ -7,7 +7,6 @@
     "deploy": "gulp deploy",
     "dist": "gulp dist",
     "lint": "jsxhint -c .jshintrc src/js --reporter node_modules/jshint-stylish/stylish.js",
-    "prestart": "npm i",
     "start": "gulp",
     "test": " npm run lint && jest --config jest-config.json",
     "test-win": "npm run lint && jest --config jest-config-win.json"
