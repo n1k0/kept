@@ -37,7 +37,7 @@ var opt = {
   ],
 
   app: {
-    src: "src/js/kept.js",
+    src: "src/js/kept.jsx",
     dest: "kept.js"
   },
   vendors: "vendors.js"
