@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 "use strict";
 
 var utils = require("../utils");
@@ -48,6 +46,7 @@ var KeepItems = React.createClass({
 
             return (
               <KeptColumns items={colItems}
+                           key={index}
                            column={index}
                            columns={this.state.columns}
                            edit={this.props.edit}

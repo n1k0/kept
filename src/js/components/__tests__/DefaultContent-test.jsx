@@ -1,7 +1,6 @@
-/** @jsx React.DOM */
-
 "use strict";
 
+var React = require('react');
 var TestUtils = require('react/addons').addons.TestUtils;
 
 jest.dontMock('../DefaultContent');
