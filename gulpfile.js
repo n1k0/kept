@@ -9,6 +9,8 @@ var source = require('vinyl-source-stream');
 var uglify = require('gulp-uglify');
 var deploy = require("gulp-gh-pages");
 
+var extend = require('util')._extend;
+
 var opt = {
   outputFolder: "build",
 
@@ -37,11 +39,15 @@ var opt = {
   ],
 
   app: {
-    src: "src/js/kept.jsx",
+    src: "src/js/kept.js",
     dest: "kept.js"
   },
   vendors: "vendors.js"
 };
+
+var jsxOpt = {
+  extensions: ['.jsx']
+}
 
 /**
  * Assets tasks
@@ -77,7 +83,8 @@ gulp.task("js", [
   ]);
 
 gulp.task("js:app", ["js:vendors"], function() {
-  return browserify("./" + opt.app.src)
+  return browserify(jsxOpt)
+    .add("./"+opt.app.src)
     .transform("reactify")
     .external("react")
     .external("react-bootstrap")
@@ -127,8 +134,9 @@ gulp.task("server", function() {
  */
 
 gulp.task("watchify", function(){
+  var args = extend(watchify.args,  jsxOpt);
 
-  var b = browserify( "./" + opt.app.src , watchify.args)
+  var b = browserify("./"+opt.app.src, args)
     .transform("reactify")
     .external("react")
     .external("react-bootstrap")
