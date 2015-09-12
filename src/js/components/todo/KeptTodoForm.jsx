@@ -70,9 +70,10 @@ var KeptTodoForm = React.createClass({
 
   render: function() {
     return (
-      <Modal title="Create new Todo" show={true} onHide={this.props.resetForm} animation={false}>
-        <form className="todo-form" role="form" onSubmit={this.addTask}>
-          <div className="modal-body">
+      <Modal.Dialog show={true} onHide={this.props.resetForm} animation={false}>
+        <Modal.Title>Create new Todo</Modal.Title>
+        <Modal.Body>
+          <form className="todo-form" role="form" onSubmit={this.addTask}>
             <input type="hidden" ref="id" defaultValue={this.props.data.id} />
             <div className="form-group">
               <input ref="title" type="text" className="form-control" placeholder="Title"
@@ -84,16 +85,16 @@ var KeptTodoForm = React.createClass({
                                          removeTask={this.removeTask} />;
               }, this)
             }</ul>
-          </div>
-          <div className="modal-footer form-group">
-            <button className="btn btn-default" type="submit">Add task</button>
-            &nbsp;
-            <button className="btn btn-primary" type="button" onClick={this.handleSave}>Save</button>
-            &nbsp;
-            <a href="#" onClick={this.handleCancel}>Cancel</a>
-          </div>
-        </form>
-      </Modal>
+          </form>
+        </Modal.Body>
+        <Modal.Footer>
+          <button className="btn btn-default" type="submit">Add task</button>
+          &nbsp;
+          <button className="btn btn-primary" type="button" onClick={this.handleSave}>Save</button>
+          &nbsp;
+          <a href="#" onClick={this.handleCancel}>Cancel</a>
+        </Modal.Footer>
+      </Modal.Dialog>
     );
   }
 });

@@ -18,7 +18,7 @@ var KeptText = React.createClass({
   render: function() {
     return (
       <div className="text-entry">
-        <div className="text-entry-text"
+        <div className="text-entry-text" ref="content"
              dangerouslySetInnerHTML={{__html: marked(this.props.data.text)}} />
       </div>
     );

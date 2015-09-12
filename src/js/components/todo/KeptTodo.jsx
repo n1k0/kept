@@ -52,7 +52,7 @@ var KeptTodo = React.createClass({
     return (
       <div>
         <ProgressBar now={this.getProgress()} label="%(percent)s%" />
-        <ul className="list-group">{
+        <ul className="list-group" ref="taskItems">{
           this.state.tasks.map(function(task, key) {
             return <KeptTodoTask key={key} index={key} data={task} toggle={this.toggle} />;
           }.bind(this))

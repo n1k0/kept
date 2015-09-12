@@ -1,10 +1,9 @@
 "use strict";
 
-var TestUtils = require('react/addons').addons.TestUtils;
-
-jest.dontMock('../KeptItems');
-jest.dontMock('../DefaultContent');
-jest.dontMock('../KeptColumns');
+var React = require("react");
+var TestUtils = require("react/lib/ReactTestUtils");
+var expect = require("chai").expect;
+var sinon = require("sinon");
 
 var KeptItems = require("../KeptItems");
 var DefaultContent = require("../DefaultContent");
@@ -15,9 +14,10 @@ var range = require('../../utils').range;
 describe("KeptItems", function() {
   describe("#render", function() {
     var array = [1,2,3];
-
+    var range;
     beforeEach(function(){
-      range.mockReturnValue(array);
+      range = sinon.stub();
+      range.returns(array);
     });
 
     it("should render default content when items list is empty", function() {
@@ -42,7 +42,7 @@ describe("KeptItems", function() {
 
       var entries = TestUtils.scryRenderedComponentsWithType(comp, KeptColumns);
 
-      expect(entries.length).toEqual(array.length);
+      expect(entries.length).to.equal(array.length);
     });
   });
 });

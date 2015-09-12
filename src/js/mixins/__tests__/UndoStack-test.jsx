@@ -1,10 +1,10 @@
 "use strict";
 
 var React = require("react");
-var TestUtils = require('react/addons').addons.TestUtils;
+var TestUtils = require("react/lib/ReactTestUtils");
+var expect = require("chai").expect;
 
-jest.dontMock('../UndoStack');
-var UndoStack = require('../UndoStack');
+var UndoStack = require("../UndoStack");
 
 var TestComp = React.createClass({
   mixins: [UndoStack],
@@ -30,18 +30,17 @@ describe("UndoStack", function() {
   var comp;
 
   beforeEach(function() {
-    comp = <TestComp/>;
-    TestUtils.renderIntoDocument(comp);
+    comp = TestUtils.renderIntoDocument(<TestComp/>);
     comp.snapshot();
   });
 
   it("should undo", function() {
     comp.setState({text: "v2"});
-    expect(comp.state.text).toEqual("v2");
+    expect(comp.state.text).to.equal("v2");
 
     comp.undo();
 
-    expect(comp.state.text).toEqual("v1");
+    expect(comp.state.text).to.equal("v1");
   });
 
   it("should redo", function() {
@@ -50,6 +49,6 @@ describe("UndoStack", function() {
 
     comp.redo();
 
-    expect(comp.state.text).toEqual("v2");
+    expect(comp.state.text).to.equal("v2");
   });
 });

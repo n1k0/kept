@@ -1,14 +1,11 @@
 "use strict";
 
-var TestUtils = require('react/addons').addons.TestUtils;
+var React = require("react");
+var reactDom = require("react-dom");
+var TestUtils = require("react/lib/ReactTestUtils");
+var expect = require("chai").expect;
+var sinon = require("sinon");
 
-jest.dontMock('react-bootstrap/Panel');
-jest.dontMock('../KeptEntry');
-jest.dontMock('../GlyphiconLink');
-jest.dontMock('../text/KeptText');
-jest.dontMock('../todo/KeptTodo');
-var KeptEntry = require("react-bootstrap/Panel");
-var KeptEntry = require("../GlyphiconLink");
 var KeptEntry = require("../KeptEntry");
 var KeptText = require("../text/KeptText");
 var KeptTodo = require("../todo/KeptTodo");
@@ -17,18 +14,17 @@ describe("KeptEntry", function() {
   var comp, fakeUpdate, fakeEdit;
 
   function renderWithProps(props) {
-    return TestUtils.renderIntoDocument(KeptEntry(props));
+    return TestUtils.renderIntoDocument(
+      <KeptEntry {...props} />
+    );
   }
 
   beforeEach(function() {
-    fakeUpdate = jest.genMockFn();
-    fakeEdit = jest.genMockFn();
+    fakeUpdate = sinon.spy();
+    fakeEdit = sinon.spy();
   });
 
-  afterEach(function() {
-    fakeUpdate.mockClear();
-    fakeEdit.mockClear();
-  });
+
 
   describe("#handleClickEdit", function() {
     it("should call edit", function() {
@@ -43,14 +39,14 @@ describe("KeptEntry", function() {
         edit: fakeEdit
       });
 
-      TestUtils.Simulate.click(comp.getDOMNode().querySelector("h3 a.edit"));
+      TestUtils.Simulate.click(reactDom.findDOMNode(comp.refs.editBt));
 
-      expect(fakeEdit).lastCalledWith({
+      expect(fakeEdit.calledWith({
         type: "text",
         id: 42,
         title: "test text",
         text: "text"
-      });
+      })).to.be.true;
     });
   });
 
@@ -63,7 +59,7 @@ describe("KeptEntry", function() {
         text: "text"
       }});
 
-      expect(TestUtils.findRenderedComponentWithType(comp, KeptText)).toBeTruthy();
+      expect(TestUtils.findRenderedComponentWithType(comp, KeptText)).to.be.ok;
     });
 
     it("should render a todo entry", function() {
@@ -78,7 +74,7 @@ describe("KeptEntry", function() {
         update: fakeUpdate
       });
 
-      expect(TestUtils.findRenderedComponentWithType(comp, KeptTodo)).toBeTruthy();
+      expect(TestUtils.findRenderedComponentWithType(comp, KeptTodo)).to.be.ok;
     });
   });
 });

@@ -7,7 +7,7 @@ var Resize = {
       return;
     }
 
-    window.addEventListener('resize', this._onResize);
+    window.addEventListener("resize", this._onResize);
     this._onResize({target:window});
   },
 
@@ -17,7 +17,7 @@ var Resize = {
       return;
     }
 
-    window.removeEventListener('resize', this._onResize);
+    window.removeEventListener("resize", this._onResize);
   },
 
   _onResize: function(event){

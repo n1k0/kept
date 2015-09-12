@@ -75,8 +75,8 @@ var KeptEntry = React.createClass({
     var panelHeader = (
       <h3>
         {this.props.itemData.title || "Untitled"}
-        <GlyphiconLink className="delete" glyph="trash" onClick={this.handleClickDelete} />
-        <GlyphiconLink className="edit" glyph="edit" onClick={this.handleClickEdit} />
+        <GlyphiconLink ref="deleteBt" className="delete" glyph="trash" onClick={this.handleClickDelete} />
+        <GlyphiconLink ref="editBt" className="edit" glyph="edit" onClick={this.handleClickEdit} />
       </h3>
     );
     return (

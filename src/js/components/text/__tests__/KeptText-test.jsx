@@ -1,20 +1,21 @@
 "use strict";
 
-var TestUtils = require('react/addons').addons.TestUtils;
+var React = require("react");
+var TestUtils = require("react/lib/ReactTestUtils");
+var expect = require("chai").expect;
 
-jest.dontMock('marked');
-jest.dontMock('../KeptText');
 var KeptText = require('../KeptText');
+describe("KeptText", function(){
+  describe("#render", function() {
+    var comp;
 
-describe("#render", function() {
-  var comp;
+    beforeEach(function() {
+      var data = {type: "text", text: "# plop"};
+      comp = TestUtils.renderIntoDocument(<KeptText data={data} />);
+    });
 
-  beforeEach(function() {
-    var data = {type: "text", text: "# plop"};
-    comp = TestUtils.renderIntoDocument(<KeptText data={data} />);
-  });
-
-  it("should render markdown text as HTML", function() {
-    expect(comp.getDOMNode().querySelector("h1").textContent).toEqual("plop");
+    it("should render markdown text as HTML", function() {
+      expect(comp.refs.content.querySelector("h1").textContent).to.equal("plop");
+    });
   });
 });

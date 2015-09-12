@@ -42,9 +42,10 @@ var KeptTextForm = React.createClass({
 
   render: function() {
     return (
-      <Modal title="Create new Text" show={true}  onHide={this.props.resetForm} animation={false}>
-        <form role="form" onSubmit={this.handleSubmit}>
-          <div className="modal-body">
+      <Modal.Dialog  show={true}  onHide={this.props.resetForm} animation={false}>
+        <Modal.Title>Create new Text</Modal.Title>
+        <Modal.Body>
+          <form role="form" onSubmit={this.handleSubmit}>
             <input type="hidden" ref="id" defaultValue={this.props.data.id || ""} />
             <div className="form-group">
               <input ref="title" type="text" className="form-control"
@@ -57,14 +58,14 @@ var KeptTextForm = React.createClass({
                         value={this.state.text || ""} rows="8" required
                         onChange={this.handleChangeText} />
             </div>
-          </div>
-          <div className="modal-footer form-group">
-            <button type="submit" className="btn btn-primary">Save</button>
-            &nbsp;
-            <a href="#" onClick={this.handleCancel}>Cancel</a>
-          </div>
-        </form>
-      </Modal>
+          </form>
+        </Modal.Body>
+        <Modal.Footer>
+          <button type="submit" className="btn btn-primary">Save</button>
+          &nbsp;
+          <a href="#" onClick={this.handleCancel}>Cancel</a>
+        </Modal.Footer>
+      </Modal.Dialog>
     );
   }
 });
