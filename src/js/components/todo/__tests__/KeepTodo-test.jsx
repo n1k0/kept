@@ -1,23 +1,21 @@
-/** @jsx React.DOM */
-
 "use strict";
 
-var TestUtils = require('react/addons').addons.TestUtils;
+var React = require("react");
+var TestUtils = require("react/lib/ReactTestUtils");
+var expect = require("chai").expect;
+var sinon = require("sinon");
 
-jest.dontMock('../KeptTodoTask');
-jest.dontMock('../KeptTodo');
-jest.dontMock('react-bootstrap/ProgressBar');
-var KeptTodo = require('../KeptTodo');
+var KeptTodo = require("../KeptTodo");
 
 describe("KeptTodo", function() {
   var comp, fakeUpdate;
 
   function renderWithProps(props) {
-    return TestUtils.renderIntoDocument(KeptTodo(props));
+    return TestUtils.renderIntoDocument(<KeptTodo {...props} />);
   }
 
   beforeEach(function() {
-    fakeUpdate = jest.genMockFn();
+    fakeUpdate = sinon.spy();
     comp = renderWithProps({
       update: fakeUpdate,
       data: {
@@ -34,22 +32,22 @@ describe("KeptTodo", function() {
   });
 
   afterEach(function() {
-    fakeUpdate.mockClear();
+    fakeUpdate.reset();
   });
 
   describe("#getProgress", function() {
     it("should compute task completion percentage", function() {
-      expect(comp.getDOMNode().querySelector('[aria-valuenow="33"]')).toBeTruthy();
+      expect(comp.getDOMNode().querySelector('[aria-valuenow="33"]')).to.not.eql(null);
     });
   });
 
   describe("#toggle", function() {
     it("should toggle a given task status", function() {
-      var checkboxes = comp.getDOMNode().querySelectorAll(".list-group-item input[type=checkbox]");
+      var checkboxes = comp.refs.taskItems.querySelectorAll(".list-group-item input[type=checkbox]");
 
       TestUtils.Simulate.change(checkboxes[1]); // second one, key=1
 
-      expect(fakeUpdate).lastCalledWith({
+      expect(fakeUpdate.calledWith({
         type: "todo",
         id: 1,
         title: "todo",
@@ -58,7 +56,7 @@ describe("KeptTodo", function() {
           {label: "todo2", done: false},
           {label: "todo3", done: false}
         ]
-      });
+      })).to.eql(true);
     });
   });
 
@@ -68,7 +66,7 @@ describe("KeptTodo", function() {
 
       TestUtils.Simulate.click(clearLink);
 
-      expect(fakeUpdate).lastCalledWith({
+      expect(fakeUpdate.calledWith({
         type: "todo",
         id: 1,
         title: "todo",
@@ -76,13 +74,13 @@ describe("KeptTodo", function() {
           {label: "todo1", done: false},
           {label: "todo3", done: false}
         ]
-      });
+      })).to.eql(true);
     });
   });
 
   describe("#render", function() {
     it("should render expected amount of entries", function() {
-      expect(comp.getDOMNode().querySelectorAll(".list-group-item").length).toEqual(3);
+      expect(comp.refs.taskItems.querySelectorAll(".list-group-item").length).to.eql(3);
     });
   });
 });

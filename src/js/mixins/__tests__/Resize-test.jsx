@@ -1,19 +1,17 @@
-/** @jsx React.DOM */
-
 "use strict";
 
 var React = require("react");
-var TestUtils = require('react/addons').addons.TestUtils;
+var TestUtils = require("react/lib/ReactTestUtils");
+var expect = require("chai").expect;
 
-jest.dontMock('../Resize');
-var Resize = require('../Resize');
+var Resize = require("../Resize");
 
 var TestComp = React.createClass({
   mixins: [Resize],
 
   getInitialState: function() {
     return {
-      columns: 1,
+      columns: 1
     };
   },
 
@@ -30,11 +28,10 @@ describe("Columns", function(){
   var compo;
 
   beforeEach(function() {
-    compo = <TestComp/>;
-    TestUtils.renderIntoDocument(compo);
+    compo = TestUtils.renderIntoDocument(<TestComp />);
   });
 
   it("should have a state columns", function(){
-    expect(compo.state.columns).toBe(3);
+    expect(compo.state.columns).to.eql(3);
   });
 });

@@ -1,8 +1,7 @@
-/** @jsx React.DOM */
-
 "use strict";
 
 var React = require("react");
+var reactDom = require("react-dom");
 var GlyphiconLink = require("./GlyphiconLink");
 var KeptText = require("./text/KeptText");
 var KeptTodo = require("./todo/KeptTodo");
@@ -29,18 +28,19 @@ var KeptEntry = React.createClass({
   },
 
   handleClickDelete: function() {
-    if (!confirm("Are you sure?"))
-       return;
-    this.getDOMNode().classList.add("fade");
+    if (!confirm("Are you sure?")) {
+      return;
+    }
+    this.refs.wrapper.classList.add("fade");
     this.timeout = setTimeout(function() {
-      this.getDOMNode().classList.remove("fade"); // just don't ask.
+      this.refs.wrapper.classList.remove("fade"); // just don't ask.
       this.props.remove(this.props.itemData);
     }.bind(this), 250); // .fade has a 250ms animation
   },
 
   handleDragStart: function(event) {
     event.dataTransfer.effectAllowed = "move";
-    event.dataTransfer.setData('text/plain', this.props.key);
+    event.dataTransfer.setData("text/plain", this.props.itemIndex);
   },
 
   handleDragEnter: function(event) {
@@ -61,34 +61,34 @@ var KeptEntry = React.createClass({
     event.preventDefault();
     this.unhighlight();
     var newIndex = parseInt(event.dataTransfer.getData("text/plain"), 10);
-    this.props.move(newIndex, this.props.key);
+    this.props.move(newIndex, this.props.itemIndex);
   },
 
   highlight: function() {
-    this.getDOMNode().querySelector(".panel").classList.add("targetted");
+    reactDom.findDOMNode(this.refs.panel).classList.add("targetted");
   },
 
   unhighlight: function() {
-    this.getDOMNode().querySelector(".panel").classList.remove("targetted");
+    reactDom.findDOMNode(this.refs.panel).classList.remove("targetted");
   },
 
   render: function() {
     var panelHeader = (
       <h3>
         {this.props.itemData.title || "Untitled"}
-        <GlyphiconLink className="delete" href="#" glyph="trash" onClick={this.handleClickDelete} />
-        <GlyphiconLink className="edit" href="#" glyph="edit" onClick={this.handleClickEdit} />
+        <GlyphiconLink ref="deleteBt" className="delete" glyph="trash" onClick={this.handleClickDelete} />
+        <GlyphiconLink ref="editBt" className="edit" glyph="edit" onClick={this.handleClickEdit} />
       </h3>
     );
     return (
-      <div className="kept-panel"
+      <div ref="wrapper" className="kept-panel"
            onDragStart={this.handleDragStart}
            onDragEnter={this.handleDragEnter}
            onDragOver={this.handleOnDragOver}
            onDrop={this.handleOnDrop}
            onDragLeave={this.handleDragLeave}
            draggable="true">
-        <Panel bsStyle="primary" header={panelHeader}>
+        <Panel ref="panel" bsStyle="primary" header={panelHeader}>
           {this.getComponent(this.props.itemData)}
         </Panel>
       </div>

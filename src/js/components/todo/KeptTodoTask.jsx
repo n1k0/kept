@@ -1,12 +1,10 @@
-/** @jsx React.DOM */
-
 "use strict";
 
 var React = require("react");
 
 var KeptTodoTask = React.createClass({
   handleChange: function() {
-    this.props.toggle(this.props.key);
+    this.props.toggle(this.props.index);
   },
 
   render: function() {

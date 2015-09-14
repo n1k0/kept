@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 "use strict";
 
 var utils = require("../utils");
@@ -19,7 +17,6 @@ var KeepItems = React.createClass({
   },
 
   onResize: function(event){
-    console.log(event, event.target.innerWidth);
     var col = 1;
     if (this.state.columnsWidth > 0) {
       col = Math.floor(event.target.innerWidth / this.state.columnsWidth);
@@ -43,11 +40,12 @@ var KeepItems = React.createClass({
           .range(this.state.columns)
           .map(function(_, index) {
             var colItems = this.props.items.filter(function(item, i) {
-              return i%this.state.columns === index;
+              return i % this.state.columns === index;
             }, this);
 
             return (
               <KeptColumns items={colItems}
+                           key={index}
                            column={index}
                            columns={this.state.columns}
                            edit={this.props.edit}

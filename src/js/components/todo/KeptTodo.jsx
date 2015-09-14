@@ -1,5 +1,3 @@
-/** @jsx React.DOM */
-
 "use strict";
 
 var React = require("react");
@@ -54,9 +52,9 @@ var KeptTodo = React.createClass({
     return (
       <div>
         <ProgressBar now={this.getProgress()} label="%(percent)s%" />
-        <ul className="list-group">{
+        <ul className="list-group" ref="taskItems">{
           this.state.tasks.map(function(task, key) {
-            return <KeptTodoTask key={key} data={task} toggle={this.toggle} />;
+            return <KeptTodoTask key={key} index={key} data={task} toggle={this.toggle} />;
           }.bind(this))
         }</ul>
         <p><a href="#" className="clear" onClick={this.clearCompleted}>Clear completed</a></p>

@@ -1,25 +1,22 @@
-/** @jsx React.DOM */
-
 "use strict";
 
 var React = require("react");
 
 var KeptTodoTaskForm = React.createClass({
   handleUpdate: function() {
-    this.props.updateTask(this.props.key, {
-      label: this.refs.label.getDOMNode().value.trim(),
-      done: this.refs.done.getDOMNode().checked
+    this.props.updateTask(this.props.index, {
+      label: this.refs.label.value.trim(),
+      done: this.refs.done.checked
     });
   },
 
   handleRemove: function(event) {
     event.preventDefault();
-    this.props.removeTask(this.props.key);
+    this.props.removeTask(this.props.index);
   },
 
   render: function() {
     var data = this.props.data;
-    console.log("rendering KeptTodoTaskForm", data.label);
     var checkedValue = data.done ? "checked" : "";
     return (
       <li className="form-inline list-group-item form-group">

@@ -1,11 +1,8 @@
-/** @jsx React.DOM */
-
 "use strict";
 
-var TestUtils = require('react/addons').addons.TestUtils;
-
-jest.dontMock('../KeptEntry');
-jest.dontMock('../KeptColumns');
+var React = require("react");
+var TestUtils = require("react/lib/ReactTestUtils");
+var expect = require("chai").expect;
 
 var KeptEntry = require("../KeptEntry");
 var KeptColumns = require("../KeptColumns");
@@ -17,7 +14,7 @@ describe("KeptColumns", function() {
       var items = [
         {id: 1, type: "text", text: "text id #1"},
         {id: 2, type: "text", text: "text id #2"},
-        {id: 3, type: "text", text: "text id #3"},
+        {id: 3, type: "text", text: "text id #3"}
       ];
       var columns = 3;
       var col = 1;
@@ -25,7 +22,7 @@ describe("KeptColumns", function() {
       var comp = TestUtils.renderIntoDocument(<KeptColumns items={items} column={col} columns={columns}/>);
 
       var entries = TestUtils.scryRenderedComponentsWithType(comp, KeptEntry);
-      expect(entries.length).toEqual(3);
+      expect(entries.length).to.eql(3);
     });
   });
 });

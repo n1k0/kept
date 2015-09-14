@@ -1,14 +1,13 @@
-/* jshint node:true */
-
 "use strict";
 
 var gulp = require("gulp");
-var browserify = require('browserify');
-var watchify = require('watchify');
-var source = require('vinyl-source-stream');
-var uglify = require('gulp-uglify');
-var webserver = require("gulp-webserver");
+var browserify = require("browserify");
+var watchify = require("watchify");
+var source = require("vinyl-source-stream");
+var uglify = require("gulp-uglify");
 var deploy = require("gulp-gh-pages");
+
+var extend = require("util")._extend;
 
 var opt = {
   outputFolder: "build",
@@ -16,7 +15,7 @@ var opt = {
   server: {
     host: "localhost",
     port: 4000,
-    livereload: true,
+    livereload: 35729,
     open:true
   },
 
@@ -38,10 +37,14 @@ var opt = {
   ],
 
   app: {
-    src: "src/js/kept.js",
+    src: "src/js/kept.jsx",
     dest: "kept.js"
   },
   vendors: "vendors.js"
+};
+
+var jsxOpt = {
+  extensions: [".jsx"]
 };
 
 /**
@@ -75,12 +78,14 @@ gulp.task("assets:fonts", function() {
 gulp.task("js", [
   "js:vendors",
   "js:app"
-  ]);
+]);
 
 gulp.task("js:app", ["js:vendors"], function() {
-  return browserify("./" + opt.app.src)
-    .transform("reactify")
+  return browserify(jsxOpt)
+    .add("./" + opt.app.src)
+    .transform("reactify", {global: true})
     .external("react")
+    .external("react-dom")
     .external("react-bootstrap")
     .external("marked")
     .bundle()
@@ -91,6 +96,7 @@ gulp.task("js:app", ["js:vendors"], function() {
 gulp.task("js:vendors", function() {
   return browserify()
     .require("react")
+    .require("react-dom")
     .require("react-bootstrap")
     .require("marked")
     .bundle()
@@ -102,9 +108,20 @@ gulp.task("js:vendors", function() {
 /**
  * Server task
  */
+var connect = require("connect");
+var livereload = require("connect-livereload");
+var staticFile = require("serve-static");
+var lrServer = require("tiny-lr")();
+
 gulp.task("server", function() {
-   return gulp.src(opt.outputFolder)
-    .pipe(webserver(opt.server));
+
+  lrServer
+    .listen(opt.server.livereload);
+
+  connect()
+    .use(livereload({port: opt.server.livereload}))
+    .use(staticFile(opt.outputFolder))
+    .listen(4000);
 });
 
 /**
@@ -112,28 +129,23 @@ gulp.task("server", function() {
  */
 
 gulp.task("watchify", function(){
+  var args = extend(watchify.args,  jsxOpt);
 
-  var b = browserify( "./" + opt.app.src , watchify.args)
-    .transform("reactify")
+  var b = browserify("./" + opt.app.src, args)
+    .transform("reactify", {global: true})
     .external("react")
+    .external("react-dom")
     .external("react-bootstrap")
     .external("marked");
 
-
-  function updateBundle(w){
-
-    return w.bundle()
+  return watchify(b).on("update", function(){
+    b.bundle()
       .pipe(source(opt.app.dest))
       .pipe(gulp.dest(opt.outputFolder + "/js"));
-  }
-
-  var watcher= watchify(b);
-  watcher.on("update", function(){
-    updateBundle(watcher);
-  });
-
-  return updateBundle(watcher);
-
+  })
+    .bundle()
+    .pipe(source(opt.app.dest))
+    .pipe(gulp.dest(opt.outputFolder + "/js"));
 });
 
 
@@ -147,6 +159,9 @@ gulp.task("watch", ["assets","js:vendors", "watchify"], function() {
   gulp.watch(opt.cssAssets,  ["assets:css"]);
   gulp.watch(opt.fontAssets, ["assets:fonts"]);
   gulp.watch(opt.htmlAssets, ["assets:html"]);
+  gulp.watch(opt.outputFolder + "/**/*", function(file){
+    lrServer.changed({body : {files : [file.path]}});
+  });
 });
 
 gulp.task("dist", ["assets", "js"], function() {
@@ -163,4 +178,8 @@ gulp.task("deploy", ["dist"], function() {
     .pipe(deploy("git@github.com:n1k0/kept.git"));
 });
 
-gulp.task("default", ["server", "watch"]);
+gulp.task("default", ["server", "watch"], function(done){
+  console.log("app running at http://" + opt.server.host + ":" + opt.server.port);
+  require("opn")("http://" + opt.server.host + ":" + opt.server.port);
+  done();
+});

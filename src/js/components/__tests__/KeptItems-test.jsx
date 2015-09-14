@@ -1,25 +1,21 @@
-/** @jsx React.DOM */
-
 "use strict";
 
-var TestUtils = require('react/addons').addons.TestUtils;
-
-jest.dontMock('../KeptItems');
-jest.dontMock('../DefaultContent');
-jest.dontMock('../KeptColumns');
+var React = require("react");
+var TestUtils = require("react/lib/ReactTestUtils");
+var expect = require("chai").expect;
+var sinon = require("sinon");
 
 var KeptItems = require("../KeptItems");
 var DefaultContent = require("../DefaultContent");
 var KeptColumns = require("../KeptColumns");
-var range = require('../../utils').range;
-
 
 describe("KeptItems", function() {
   describe("#render", function() {
     var array = [1,2,3];
-
+    var range;
     beforeEach(function(){
-      range.mockReturnValue(array);
+      range = sinon.stub();
+      range.returns(array);
     });
 
     it("should render default content when items list is empty", function() {
@@ -37,14 +33,14 @@ describe("KeptItems", function() {
         {id: 2, type: "text", text: "text id #2"},
         {id: 3, type: "text", text: "text id #3"},
         {id: 4, type: "text", text: "text id #3"},
-        {id: 5, type: "text", text: "text id #3"},
+        {id: 5, type: "text", text: "text id #3"}
       ];
 
       var comp = TestUtils.renderIntoDocument(<KeptItems items={items} />);
 
       var entries = TestUtils.scryRenderedComponentsWithType(comp, KeptColumns);
 
-      expect(entries.length).toEqual(array.length);
+      expect(entries).to.have.length.of(array.length);
     });
   });
 });

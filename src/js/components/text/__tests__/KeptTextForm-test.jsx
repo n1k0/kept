@@ -1,12 +1,12 @@
-/** @jsx React.DOM */
-
 "use strict";
 
-var TestUtils = require('react/addons').addons.TestUtils;
+var React = require("react");
+var reactDom = require("react-dom");
+var TestUtils = require("react/lib/ReactTestUtils");
+var expect = require("chai").expect;
+var sinon = require("sinon");
 
-jest.dontMock('react-bootstrap');
-jest.dontMock('../KeptTextForm');
-var KeptTextForm = require('../KeptTextForm');
+var KeptTextForm = require("../KeptTextForm");
 
 describe("KeptTextForm", function() {
   var fakeCreate, fakeUpdate;
@@ -19,14 +19,16 @@ describe("KeptTextForm", function() {
   };
 
   beforeEach(function() {
-    fakeCreate = jest.genMockFn();
-    fakeUpdate = jest.genMockFn();
+    fakeCreate = sinon.spy();
+    fakeUpdate = sinon.spy();
   });
 
   describe("#handleSubmit", function() {
     it("should create a new text", function() {
       var comp = TestUtils.renderIntoDocument(
-        <KeptTextForm data={{}} create={fakeCreate} update={fakeUpdate} />);
+        <KeptTextForm data={{}} create={fakeCreate} update={fakeUpdate} />
+      );
+
       var form = comp.getDOMNode().querySelector("form");
 
       TestUtils.Simulate.change(form.querySelector("input[type=text]"),
@@ -35,39 +37,40 @@ describe("KeptTextForm", function() {
                                 {target: {value: "# world"}});
       TestUtils.Simulate.submit(form);
 
-      expect(fakeCreate).toBeCalledWith({
+      expect(fakeCreate.calledWith({
         id: null,
         type: "text",
         title: "Hello",
         text: "# world"
-      });
+      })).to.eql(true);
     });
 
     it("should update an existing text", function() {
       var comp = TestUtils.renderIntoDocument(
         <KeptTextForm data={existingEntry} create={fakeCreate} update={fakeUpdate} />);
-      var form = comp.getDOMNode().querySelector("form");
 
-      TestUtils.Simulate.change(form.querySelector("input[type=text]"),
+      TestUtils.Simulate.change(comp.refs.title ,
                                 {target: {value: "Plip"}});
-      TestUtils.Simulate.change(form.querySelector("textarea"),
+      TestUtils.Simulate.change(comp.refs.text,
                                 {target: {value: "# plip"}});
-      TestUtils.Simulate.submit(form);
+      TestUtils.Simulate.submit(comp.refs.title.form);
 
-      expect(fakeUpdate).toBeCalledWith({
+      expect(fakeUpdate.calledWith({
         id: 1,
         type: "text",
         title: "Plip",
         text: "# plip"
-      });
+      })).to.eql(true);
     });
   });
 
   describe("#render", function() {
     it("should render HTML content", function() {
-      var comp = TestUtils.renderIntoDocument(<KeptTextForm data={existingEntry} />);
+      var comp = TestUtils.renderIntoDocument(
+        <KeptTextForm data={{}} create={fakeCreate} update={fakeUpdate} />
+      );
 
-      expect(comp.getDOMNode().querySelector("form")).toBeTruthy();
+      expect(reactDom.findDOMNode(comp).querySelector("form")).to.not.eql(null);
     });
   });
 });
