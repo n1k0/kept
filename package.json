@@ -6,7 +6,7 @@
   "scripts": {
     "deploy": "gulp deploy",
     "dist": "gulp dist",
-    "lint": "eslint src",
+    "lint": "eslint --ext .js --ext .jsx src gulpfile.js",
     "start": "gulp",
     "test": "mocha src/**/__tests__/*",
     "tdd": "mocha --watch ./src/**/__tests__/*.*"

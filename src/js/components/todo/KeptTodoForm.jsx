@@ -1,7 +1,6 @@
 "use strict";
 
 var React = require("react");
-var reactDom = require("react-dom");
 var Modal = require("react-bootstrap").Modal;
 var KeptTodoTaskForm = require("./KeptTodoTaskForm");
 
@@ -42,7 +41,6 @@ var KeptTodoForm = React.createClass({
       id: id,
       title: this.refs.title.value.trim(),
       tasks: (this.state.tasks || []).filter(function(task) {
-        console.log(task.label)
         return !!task.label;
       })
     });

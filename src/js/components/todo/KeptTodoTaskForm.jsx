@@ -3,7 +3,7 @@
 var React = require("react");
 
 var KeptTodoTaskForm = React.createClass({
-  handleUpdate: function(event) {
+  handleUpdate: function() {
     this.props.updateTask(this.props.index, {
       label: this.refs.label.value.trim(),
       done: this.refs.done.checked

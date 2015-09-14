@@ -28,8 +28,9 @@ var KeptEntry = React.createClass({
   },
 
   handleClickDelete: function() {
-    if (!confirm("Are you sure?"))
-       return;
+    if (!confirm("Are you sure?")) {
+      return;
+    }
     this.refs.wrapper.classList.add("fade");
     this.timeout = setTimeout(function() {
       this.refs.wrapper.classList.remove("fade"); // just don't ask.
@@ -39,7 +40,7 @@ var KeptEntry = React.createClass({
 
   handleDragStart: function(event) {
     event.dataTransfer.effectAllowed = "move";
-    event.dataTransfer.setData('text/plain', this.props.itemIndex);
+    event.dataTransfer.setData("text/plain", this.props.itemIndex);
   },
 
   handleDragEnter: function(event) {

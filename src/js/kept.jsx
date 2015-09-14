@@ -7,4 +7,4 @@ var KeptStore = require("./store");
 var store = new KeptStore();
 
 reactDom.render(<KeptApp store={store} />,
-                      document.getElementById('kept'));
+                      document.getElementById("kept"));

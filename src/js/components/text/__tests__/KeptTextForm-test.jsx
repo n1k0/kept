@@ -42,36 +42,35 @@ describe("KeptTextForm", function() {
         type: "text",
         title: "Hello",
         text: "# world"
-      })).to.be.true;
+      })).to.eql(true);
     });
 
     it("should update an existing text", function() {
       var comp = TestUtils.renderIntoDocument(
         <KeptTextForm data={existingEntry} create={fakeCreate} update={fakeUpdate} />);
 
-      TestUtils.Simulate.change(reactDom.findDOMNode(comp.refs.title) ,
+      TestUtils.Simulate.change(comp.refs.title ,
                                 {target: {value: "Plip"}});
-      TestUtils.Simulate.change(reactDom.findDOMNode(comp.refs.text),
+      TestUtils.Simulate.change(comp.refs.text,
                                 {target: {value: "# plip"}});
-      TestUtils.Simulate.submit(reactDom.findDOMNode(comp.refs.title).form);
+      TestUtils.Simulate.submit(comp.refs.title.form);
 
       expect(fakeUpdate.calledWith({
         id: 1,
         type: "text",
         title: "Plip",
         text: "# plip"
-      })).to.be.true;
+      })).to.eql(true);
     });
   });
 
   describe("#render", function() {
     it("should render HTML content", function() {
-      var renderer = TestUtils.createRenderer();
-      renderer.render(<KeptTextForm data={existingEntry} />);
+      var comp = TestUtils.renderIntoDocument(
+        <KeptTextForm data={{}} create={fakeCreate} update={fakeUpdate} />
+      );
 
-      var result = renderer.getRenderOutput();
-
-      expect(result.props.children.length).to.equal(3);
+      expect(reactDom.findDOMNode(comp).querySelector("form")).to.not.eql(null);
     });
   });
 });

@@ -22,7 +22,7 @@ describe("KeptColumns", function() {
       var comp = TestUtils.renderIntoDocument(<KeptColumns items={items} column={col} columns={columns}/>);
 
       var entries = TestUtils.scryRenderedComponentsWithType(comp, KeptEntry);
-      expect(entries.length).to.equal(3);
+      expect(entries.length).to.eql(3);
     });
   });
 });

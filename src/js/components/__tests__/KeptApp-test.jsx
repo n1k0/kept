@@ -4,7 +4,6 @@ var TestUtils = require("react/lib/ReactTestUtils");
 var React = require("react");
 var expect = require("chai").expect;
 var renderer = TestUtils.createRenderer();
-
 var KeptApp = require("../KeptApp");
 var KeptTextForm = require("../text/KeptTextForm");
 var KeptTodoForm = require("../todo/KeptTodoForm");
@@ -49,7 +48,7 @@ describe("KeptApp", function() {
 
       textForm({});
 
-      //expect(TestUtils.isComponentOfType(comp.state.form, KeptTextForm)).to.be.true;
+      expect(TestUtils.isElementOfType (comp.state.form, KeptTextForm)).eql(true);
     });
 
     it("should add a todo form component to state", function() {
@@ -57,7 +56,7 @@ describe("KeptApp", function() {
 
       todoForm({});
 
-      //expect(TestUtils.isComponentOfType(comp.state.form, KeptTodoForm)).to.be.true;
+      expect(TestUtils.isElementOfType (comp.state.form, KeptTodoForm)).eql(true);
     });
   });
 });

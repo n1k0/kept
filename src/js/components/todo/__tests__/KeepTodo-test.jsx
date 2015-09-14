@@ -11,7 +11,7 @@ describe("KeptTodo", function() {
   var comp, fakeUpdate;
 
   function renderWithProps(props) {
-    return TestUtils.renderIntoDocument( <KeptTodo {...props} />);
+    return TestUtils.renderIntoDocument(<KeptTodo {...props} />);
   }
 
   beforeEach(function() {
@@ -37,7 +37,7 @@ describe("KeptTodo", function() {
 
   describe("#getProgress", function() {
     it("should compute task completion percentage", function() {
-      expect(comp.getDOMNode().querySelector('[aria-valuenow="33"]')).to.be.ok;
+      expect(comp.getDOMNode().querySelector('[aria-valuenow="33"]')).to.not.eql(null);
     });
   });
 
@@ -56,7 +56,7 @@ describe("KeptTodo", function() {
           {label: "todo2", done: false},
           {label: "todo3", done: false}
         ]
-      })).to.be.true;
+      })).to.eql(true);
     });
   });
 
@@ -74,13 +74,13 @@ describe("KeptTodo", function() {
           {label: "todo1", done: false},
           {label: "todo3", done: false}
         ]
-      })).to.be.true;
+      })).to.eql(true);
     });
   });
 
   describe("#render", function() {
     it("should render expected amount of entries", function() {
-      expect(comp.refs.taskItems.querySelectorAll(".list-group-item").length).to.equal(3);
+      expect(comp.refs.taskItems.querySelectorAll(".list-group-item").length).to.eql(3);
     });
   });
 });

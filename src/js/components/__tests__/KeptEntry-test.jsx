@@ -46,7 +46,7 @@ describe("KeptEntry", function() {
         id: 42,
         title: "test text",
         text: "text"
-      })).to.be.true;
+      })).to.eql(true);
     });
   });
 
@@ -59,7 +59,7 @@ describe("KeptEntry", function() {
         text: "text"
       }});
 
-      expect(TestUtils.findRenderedComponentWithType(comp, KeptText)).to.be.ok;
+      expect(TestUtils.findRenderedComponentWithType(comp, KeptText)).to.not.eql(null);
     });
 
     it("should render a todo entry", function() {
@@ -74,7 +74,7 @@ describe("KeptEntry", function() {
         update: fakeUpdate
       });
 
-      expect(TestUtils.findRenderedComponentWithType(comp, KeptTodo)).to.be.ok;
+      expect(TestUtils.findRenderedComponentWithType(comp, KeptTodo)).to.not.eql(null);
     });
   });
 });

@@ -7,7 +7,7 @@ var Glyphicon = require("react-bootstrap").Glyphicon;
 var GlyphiconLink = React.createClass({
   render: function() {
     return (
-      <Button bsStyle='link' {...this.props} ><Glyphicon glyph={this.props.glyph} /></Button>
+      <Button bsStyle="link" {...this.props} ><Glyphicon glyph={this.props.glyph} /></Button>
     );
   }
 });

@@ -18,7 +18,7 @@ describe("DefaultContent", function() {
     });
 
     it("should render HTML content", function() {
-      expect(result.props.children.length > 0).to.be.true;
+      expect(result.props.children.length > 0).eql(true);
     });
   });
 
@@ -43,7 +43,7 @@ describe("DefaultContent", function() {
 
       TestUtils.Simulate.click(newTextLink);
 
-      expect(fakeCreateText.calledOnce).to.be.true;
+      expect(fakeCreateText.calledOnce).eql(true);
     });
 
     it("should add a new todo entry when clicking on Todo link", function() {
@@ -51,7 +51,7 @@ describe("DefaultContent", function() {
 
       TestUtils.Simulate.click(newTodoLink);
 
-      expect(fakeCreateTodo.calledOnce).to.be.true;
+      expect(fakeCreateTodo.calledOnce).eql(true);
     });
   });
 });

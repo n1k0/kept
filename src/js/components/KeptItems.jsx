@@ -40,7 +40,7 @@ var KeepItems = React.createClass({
           .range(this.state.columns)
           .map(function(_, index) {
             var colItems = this.props.items.filter(function(item, i) {
-              return i%this.state.columns === index;
+              return i % this.state.columns === index;
             }, this);
 
             return (

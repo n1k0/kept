@@ -8,8 +8,6 @@ var sinon = require("sinon");
 var KeptItems = require("../KeptItems");
 var DefaultContent = require("../DefaultContent");
 var KeptColumns = require("../KeptColumns");
-var range = require('../../utils').range;
-
 
 describe("KeptItems", function() {
   describe("#render", function() {
@@ -35,14 +33,14 @@ describe("KeptItems", function() {
         {id: 2, type: "text", text: "text id #2"},
         {id: 3, type: "text", text: "text id #3"},
         {id: 4, type: "text", text: "text id #3"},
-        {id: 5, type: "text", text: "text id #3"},
+        {id: 5, type: "text", text: "text id #3"}
       ];
 
       var comp = TestUtils.renderIntoDocument(<KeptItems items={items} />);
 
       var entries = TestUtils.scryRenderedComponentsWithType(comp, KeptColumns);
 
-      expect(entries.length).to.equal(array.length);
+      expect(entries).to.have.length.of(array.length);
     });
   });
 });

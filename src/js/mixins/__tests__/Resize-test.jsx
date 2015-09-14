@@ -32,6 +32,6 @@ describe("Columns", function(){
   });
 
   it("should have a state columns", function(){
-    expect(compo.state.columns).to.equal(3);
+    expect(compo.state.columns).to.eql(3);
   });
 });
